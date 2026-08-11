@@ -1130,6 +1130,7 @@ h2#page-title a.dashicons {
 // equal-specificity corrections continue to win by source order.
 @import "friends-lists";
 @import "add-friend";
+@import "direct-messages";
 
 // Fork additions — must stay last so its rules take precedence.
 @import "mobile";

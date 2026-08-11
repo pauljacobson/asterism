@@ -64,6 +64,11 @@ const PAIRS = [
 	// ActivityPub mention indicator.
 	[ 'light mention indicator on card bg', '#b42318', '#f7f8f9', 4.5 ],
 	[ 'dark mention indicator on card bg', '#ff8a80', '#313443', 4.5 ],
+
+	// Direct Messages.
+	[ 'DM unread count on badge', '#ffffff', '#b42318', 4.5 ],
+	[ 'light DM text on own message', '#3b4351', '#dce7ff', 4.5 ],
+	[ 'dark DM text on own message', '#ffffff', '#23406b', 4.5 ],
 ];
 
 let failed = 0;
