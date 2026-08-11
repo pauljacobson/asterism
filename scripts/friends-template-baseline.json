@@ -1,0 +1,86 @@
+{
+	"friendsVersion": "4.2.1",
+	"upstreamCommit": "fe56fa29eb6cdadb5b0ee54fb24b6b6f358ab4b8",
+	"files": [
+		{
+			"path": "templates/frontend/header.php",
+			"role": "retained override",
+			"review": "Reconcile document metadata, sidebar integration, page header, and search controls.",
+			"sha256": "e099a38e2d357f6d8d938ef903d6b12737e761d2ae7bb9a76c84fb13587bd48c",
+			"signals": {
+				"hooks": ["friends_after_header"],
+				"classes": ["ab-icon", "accordion-container", "author", "bt-action", "btn", "btn-primary", "dashicons", "dashicons-menu-alt2", "form-autocomplete", "form-autocomplete-input", "form-icon", "form-input", "friends-brand", "friends-logo", "friends-nav", "friends-sidebar-customize", "has-icon-right", "input-group", "input-group-btn", "input-inline", "mb-2", "menu", "navbar-section", "no-js", "no-svg", "off-canvas-content", "off-canvas-overlay", "off-canvas-sidebar", "off-canvas-toggle", "search-dialog"]
+			}
+		},
+		{
+			"path": "templates/frontend/parts/header.php",
+			"role": "retained override",
+			"review": "Reconcile author metadata, ActivityPub presentation, collapse control, and menu hooks without restoring the suppressed duplicate action menu.",
+			"sha256": "55e5dfa7a04fb9bbffd3bb375270b36d687341c4f5cf0f2d7f419b583c9e55de",
+			"signals": {
+				"hooks": ["friends_author_avatar_url", "friends_author_url", "friends_frontend_post_types", "friends_override_author_name", "friends_post_author_meta"],
+				"classes": ["author", "author-avatar", "avatar", "btn", "btn-link", "card-header", "col-auto", "col-ml-auto", "collapse-post", "columns", "dashicons", "dashicons-fullscreen-exit-alt", "dashicons-menu-alt2", "entry-header", "friends-dropdown", "friends-dropdown-right", "friends-dropdown-toggle", "mention-indicator", "menu", "mr-2", "overflow", "permalink", "post-meta", "reading-time", "translator-exclude"]
+			}
+		},
+		{
+			"path": "templates/frontend/parts/header-status.php",
+			"role": "retained override",
+			"review": "Reconcile custom emoji, mention, reblog avatar, author metadata, collapse control, and menu behavior.",
+			"sha256": "1a05d13ab628ff356b8f897e796e1d631dd8b8ebbfa7ed82f4e0cd7537d668c2",
+			"signals": {
+				"hooks": ["friends_author_avatar_url", "friends_author_url", "friends_frontend_post_types", "friends_override_author_name", "friends_post_author_meta"],
+				"classes": ["author", "author-avatar", "avatar", "avatar-overlay", "btn", "btn-link", "card-header", "col-auto", "col-ml-auto", "collapse-post", "columns", "dashicons", "dashicons-fullscreen-exit-alt", "dashicons-menu-alt2", "entry-header", "friends-dropdown", "friends-dropdown-right", "friends-dropdown-toggle", "invisible", "mention-indicator", "menu", "mr-2", "overflow", "permalink", "post-meta", "reading-time", "teaser"]
+			}
+		},
+		{
+			"path": "templates/frontend/parts/header-menu.php",
+			"role": "menu dependency",
+			"review": "Check action names and availability against Asterism's accessible dropdown behavior.",
+			"sha256": "934355135984a5ee491d8181b33298d530746a2fd972adb987d802c50dfeb9b1",
+			"signals": {
+				"hooks": ["friends_entry_dropdown_menu", "friends_frontend_post_types", "friends_share_salt", "friends_show_author_edit"],
+				"classes": ["friends-muffle-post", "friends-trash-post", "friends-untrash-post", "menu-item"]
+			}
+		},
+		{
+			"path": "templates/frontend/index.php",
+			"role": "inherited feed template",
+			"review": "Check empty, welcome, filter, pagination, and feed states.",
+			"sha256": "1a2913d74ecff6127e5ea4002692bbd8a84088f037b067826c951b6cf75ab36b",
+			"signals": {
+				"hooks": [],
+				"classes": ["card", "card-body", "col-12", "columns", "friends-empty-state", "posts"]
+			}
+		},
+		{
+			"path": "templates/frontend/subscriptions.php",
+			"role": "styled inherited feature",
+			"review": "Check Following search, filters, sorting, pagination, and subscription actions.",
+			"sha256": "683c85955dbabbbd03dd3de653143b4a2aa3460e151b73a2f851ad2309f4ccb6",
+			"signals": {
+				"hooks": [],
+				"classes": ["avatar", "button", "dashicons", "dashicons-dismiss", "friends-search", "friends-search-clear", "friends-search-input", "friends-search-label", "friends-search-submit", "pagination", "starred", "subscription-action", "subscription-actions", "subscription-description", "subscription-folder", "subscription-info", "subscription-item", "subscription-link", "subscription-meta", "subscription-name", "subscription-unfollow", "subscriptions"]
+			}
+		},
+		{
+			"path": "templates/frontend/add-friend-form.php",
+			"role": "styled inherited feature",
+			"review": "Check multi-address, handle, OPML, discovery, preview, and bulk-add controls.",
+			"sha256": "d6c5097f9f1b858c00528821069a9a4f0aadd0bd59f727747e3b27d4e07fc279",
+			"signals": {
+				"hooks": ["friends_mastodon_instances"],
+				"classes": ["add-friend-card", "add-friend-discovery-card", "add-friend-subscriptions", "add-subscription-input", "btn", "btn-primary", "card", "card-body", "form-input", "opml-file-hint", "subscriptions"]
+			}
+		},
+		{
+			"path": "templates/frontend/messages.php",
+			"role": "styled inherited feature",
+			"review": "Check conversation, unread, thread, message, account, and reply markup.",
+			"sha256": "4a73ba242b8268f2893beba133125b60a5f4e67d9d579d326ef80c1e63da60c9",
+			"signals": {
+				"hooks": ["friends_message_form_accounts", "the_content"],
+				"classes": ["avatar", "friends-dm-conversation-main", "friends-dm-conversation-meta", "friends-dm-conversation-name", "friends-dm-conversation-preview", "friends-dm-empty", "friends-dm-message-avatar", "friends-dm-message-body", "friends-dm-message-content", "friends-dm-message-meta", "friends-dm-messages", "friends-dm-reply", "friends-dm-sidebar", "friends-dm-thread", "friends-dm-thread-header", "friends-dm-unread-count", "friends-dm-view"]
+			}
+		}
+	]
+}
