@@ -1,0 +1,6 @@
+node_modules/
+
+# Generated from style.scss and committed on purpose — WordPress users cannot
+# run a Sass build, and upstream ships it too. The source map is not committed
+# because it embeds absolute local paths.
+css/style.css.map

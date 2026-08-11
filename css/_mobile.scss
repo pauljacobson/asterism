@@ -1,0 +1,469 @@
+// Mobile-first corrections, imported last so these win without !important wars.
+//
+// Three groups of change:
+//   1. Upstream hides the whole feed header (chips, counts, reaction filters,
+//      search) with `display: none !important`. We want it back, laid out so it
+//      wraps instead of overflowing.
+//   2. Defensive containment for markup upstream never constrained — iframes,
+//      tables, embeds. See the note below: this is precautionary, not measured.
+//   2b. Accessibility fixes for the header restored in (1), which upstream's
+//      dark-mode block never had to style because the header was hidden.
+//
+// Spectre's $off-canvas-breakpoint (960px) is the existing desktop threshold;
+// reuse it rather than inventing a second one.
+//
+// MEASUREMENT, 2026-08-11. 384 real cached posts from 20 of Paul's feeds were
+// analysed: 0 iframes, 0 tables, 0 pre, 0 video, 0 embed; 49 images and 107
+// unbroken tokens of 45+ characters. A DevTools sweep at a 390px viewport found
+// exactly one overflowing element on the whole page — WordPress's own admin bar
+// (`#wp-admin-bar-my-account .display-name`), nothing in the feed itself.
+//
+// So section 2 fixes problems this feed does not currently have. Retained by
+// Paul's explicit decision as cheap insurance against boosted blog content that
+// might carry an embed or a table. Do not cite it as evidence-based.
+
+// ---------------------------------------------------------------------------
+// 1. Restore the feed header
+// ---------------------------------------------------------------------------
+
+.friends-page {
+
+	#main-header #page-title {
+		display: block !important; // overrides upstream's hide
+	}
+
+	.off-canvas-content header.navbar {
+		display: flex !important; // overrides upstream's hide
+		flex-wrap: wrap;
+		gap: .5rem;
+		margin-bottom: 1rem;
+
+		// On a phone the title/chips block and the search box each take a full
+		// row. `min-width: 0` is what actually lets a flex child shrink below
+		// its content width — without it the search form refuses to narrow and
+		// pushes the header sideways.
+		section.navbar-section.author,
+		section.navbar-section.search {
+			flex: 1 1 100%;
+			min-width: 0;
+		}
+
+		section.navbar-section.search form {
+			width: 100%;
+		}
+
+		// The off-canvas toggle is positioned over the top-left corner, so the
+		// title needs to clear it.
+		#page-title {
+			margin-left: 3rem;
+			font-size: 1.4rem;
+			line-height: 1.2;
+		}
+	}
+
+	// Chips wrap onto as many rows as they need instead of forming one long line.
+	#main-header {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: .35rem;
+
+		#page-title {
+			flex: 1 1 100%;
+		}
+
+		.chip {
+			margin: 0; // gap handles spacing now
+		}
+	}
+}
+
+// ---------------------------------------------------------------------------
+// 2. Stop post content overflowing to the right
+// ---------------------------------------------------------------------------
+
+.friends-page {
+
+	// Upstream constrains img and video but never iframe/embed/object, which is
+	// what most federated posts actually use for media.
+	iframe,
+	embed,
+	object {
+		max-width: 100%;
+	}
+
+	// Video embeds arrive with hardcoded width/height attributes. Letting the
+	// aspect ratio drive the height keeps them intact when the width shrinks.
+	iframe {
+		width: 100%;
+		height: auto;
+		aspect-ratio: 16 / 9;
+	}
+
+	// Tables cannot shrink below their content, so give them their own scroll
+	// container rather than letting them widen the page.
+	table {
+		display: block;
+		max-width: 100%;
+		overflow-x: auto;
+	}
+
+	// Long unbroken URLs are common in feed items and are not covered by
+	// upstream's `overflow-wrap: break-word` on every element that needs it.
+	.card-body,
+	div.teaser,
+	.entry-content {
+		overflow-wrap: anywhere;
+	}
+}
+
+// Status-format posts pin their teaser to a calculated width that assumes a wide
+// viewport. On a phone let it wrap normally instead of being a nowrap ellipsis.
+.friends-page article.format-status {
+
+	.overflow {
+		width: auto;
+		margin-left: 0;
+	}
+
+	div.teaser {
+		width: auto;
+		max-width: 100%;
+		white-space: normal;
+		text-overflow: clip;
+	}
+
+	header div.post-meta {
+		max-width: 100%;
+	}
+}
+
+// ponytail: blanket guard so a single unconstrained element cannot make the whole
+// page pan sideways. It hides the symptom rather than the cause, and it will clip
+// anything intentionally positioned outside the container.
+//
+// The overflow check it was meant to be removed after DID come back clean — the
+// only offender was the WordPress admin bar. Kept anyway, by decision, as a
+// backstop. Ceiling: it will silently clip a deliberately-overhanging element,
+// so if something ever goes mysteriously missing at the right edge, look here
+// first.
+.friends-page {
+	overflow-x: hidden;
+}
+
+// ---------------------------------------------------------------------------
+// 2b. Accessible header chips
+// ---------------------------------------------------------------------------
+//
+// Spectre gives .chip a light grey background (#d5dbdf) and no colour of its
+// own. Upstream's dark-mode block sets every anchor to `color: white
+// !important`, and chips are anchors — so in dark mode they render white on
+// light grey at 1.40:1, against a WCAG AA requirement of 4.5:1.
+//
+// Upstream never hit this because it hid the header entirely. Un-hiding it in
+// section 1 is what exposed the gap, so fixing it belongs here.
+//
+// Every colour pair below is verified by `node check-contrast.mjs`.
+
+.friends-page #main-header .chip {
+	// Explicit pair rather than inheriting: 8.73:1.
+	background: #eef0f3;
+	color: #3b4351;
+
+	// The pill's own boundary against the page background, for WCAG 1.4.11
+	// (non-text contrast, 3:1). Without it the chip shape is nearly invisible.
+	border: 1px solid #848c96;
+
+	// WCAG 2.5.8 (AA) wants a 24x24px minimum target. Spectre's chip is
+	// height: 1.2rem (~19px), which fails. 2rem clears it without making a
+	// five-chip header eat the whole screen; bump to 2.75rem for AAA (2.5.5).
+	min-height: 2rem;
+	height: auto;
+	padding: .35rem .7rem;
+	line-height: 1.3;
+
+	// Spectre truncates chips with nowrap + ellipsis, which hides label text on
+	// a narrow screen. Let them wrap instead.
+	white-space: normal;
+	overflow: visible;
+	text-overflow: clip;
+	max-width: 100%;
+
+	// Upstream adds `flex: 1 0 auto`, which stretches chips to fill each row and
+	// makes the header look like a broken grid. Size them to their content.
+	flex: 0 1 auto;
+
+	// Keyboard focus must be visible — WCAG 2.4.7.
+	&:focus-visible {
+		outline: 2px solid #2e5bec;
+		outline-offset: 2px;
+	}
+}
+
+// The search field's placeholder: upstream forces rgb(139,139,139), which is
+// 3.41:1 on a white input. Placeholders are text and need 4.5:1.
+.friends-page .navbar-section.search .form-input::placeholder {
+	color: #5c6470 !important;
+	opacity: 1;
+}
+
+.friends-page .navbar-section.search .form-input:focus-visible,
+.friends-page .navbar-section.search .btn:focus-visible,
+.friends-page .off-canvas-toggle:focus-visible {
+	outline: 2px solid #2e5bec;
+	outline-offset: 2px;
+}
+
+@media (prefers-color-scheme: dark) {
+
+	.friends-page #main-header .chip {
+		// White on #313443 is 12.33:1. #313443 is the surface colour upstream
+		// already uses for articles and cards, so chips sit in the same family.
+		background: #313443;
+		color: #fff;
+		border-color: #6b7183; // 3.26:1 against the dark page background
+	}
+
+	// Spectre's active chip (#2e5bec with white text) is 5.49:1 — already
+	// compliant, so it is deliberately left alone.
+
+	.friends-page #main-header .chip:focus-visible,
+	.friends-page .navbar-section.search .form-input:focus-visible,
+	.friends-page .navbar-section.search .btn:focus-visible,
+	.friends-page .off-canvas-toggle:focus-visible {
+		outline-color: #8ab4ff; // 7.59:1 against the dark page background
+	}
+
+	// Upstream's dark block never restyles .form-input, so Spectre leaves the
+	// search field white — a glaring panel in an otherwise dark header, and it
+	// would strand the placeholder colour below. Bring the field into the scheme.
+	.friends-page .navbar-section.search .form-input {
+		background: #313443;
+		color: #fff; // 12.33:1
+		border-color: #6b7183;
+	}
+
+	.friends-page .navbar-section.search .form-input::placeholder {
+		color: #b9bfcb !important; // 6.68:1 on #313443
+	}
+}
+
+// ---------------------------------------------------------------------------
+// 2e. Post footer actions: show Boost, and let the row wrap
+// ---------------------------------------------------------------------------
+//
+// Two upstream problems, both visible on a phone:
+//
+//   1. `article .card-footer .friends-boost { display: none }` (style.scss:869)
+//      hides the Boost button outright. Boost is the native ActivityPub
+//      `Announce` — the fediverse boost — and is a different operation from
+//      Reblog, which creates a new local WordPress post. Both belong here.
+//
+//   2. `footer.entry-meta { display: flex; justify-content: flex-end }` with no
+//      `flex-wrap`, so Reblog / Reaction / Comments / Menu are forced onto one
+//      line. They shrink below their labels' width, which is what makes
+//      "+ Reaction" and "Comments" overlap, and pushes the last items past the
+//      content edge.
+
+.friends-page article .card-footer .friends-boost {
+	display: inline-flex;
+	align-items: center;
+}
+
+.friends-page section.posts footer.entry-meta {
+	flex-wrap: wrap;
+	// Row gap as well as column gap, so wrapped rows do not touch.
+	gap: .25rem .5rem;
+
+	// Never squeeze an action narrower than its label — that is the overlap.
+	> * {
+		flex: 0 0 auto;
+	}
+
+	// Meet the same 24px minimum target size as the header chips (WCAG 2.5.8).
+	.btn,
+	> a {
+		min-height: 2rem;
+		display: inline-flex;
+		align-items: center;
+	}
+}
+
+// ---------------------------------------------------------------------------
+// 2f. Comment form
+// ---------------------------------------------------------------------------
+//
+// The reply form is core WordPress markup that neither Friends nor upstream
+// styles, so it arrives unthemed:
+//
+//   1. `<textarea cols="45">` has an intrinsic width from the cols attribute and
+//      no max-width, so it overhangs the card's right edge.
+//   2. The submit button carries theme.json's `wp-element-button` classes, which
+//      render a pale grey button unlike every other control here.
+//   3. The textarea stays white in dark mode, matching nothing around it.
+//
+// Colour pairs verified by `node check-contrast.mjs`.
+
+.friends-page {
+
+	// `cols` is what makes it overhang. Width plus border-box beats it without
+	// having to touch the attribute.
+	.comment-form-comment textarea,
+	.comment-form textarea,
+	.comment-respond textarea {
+		width: 100%;
+		max-width: 100%;
+		box-sizing: border-box;
+		// Horizontal dragging would reintroduce the overflow.
+		resize: vertical;
+		padding: .5rem;
+		border: 1px solid #848c96;
+		border-radius: .2rem;
+		background: #fff;
+		color: #3b4351; // 9.94:1
+		font-size: 1rem; // stops iOS Safari zooming on focus
+		line-height: 1.4;
+	}
+
+	.comment-form-comment label,
+	.comment-respond label {
+		display: block;
+		margin-bottom: .25rem;
+	}
+
+	// Neutral surface rather than theme.json's wp-element-button, and rather than
+	// Spectre's primary blue: this is the same treatment as the header chips and
+	// the .btn elements upstream already styles, so the comment form reads as part
+	// of the card instead of shouting from inside it.
+	.form-submit .submit,
+	.comment-respond input[type="submit"] {
+		background: #eef0f3;
+		border: 1px solid #848c96; // 3.20:1 boundary
+		border-radius: .2rem;
+		color: #3b4351; // 8.73:1
+		padding: .35rem 1rem;
+		min-height: 2rem; // same target size as the header chips
+		font-size: .9rem;
+		line-height: 1.3;
+		cursor: pointer;
+	}
+
+	.comment-form-comment textarea:focus-visible,
+	.form-submit .submit:focus-visible,
+	.comment-respond input[type="submit"]:focus-visible {
+		outline: 2px solid #2e5bec;
+		outline-offset: 2px;
+	}
+
+	// Keep the whole form inside the card on a narrow screen.
+	.comment-respond,
+	.comment-form {
+		max-width: 100%;
+		box-sizing: border-box;
+	}
+
+	// Status messages that sit above the reply form. Secondary weight, so the
+	// reply heading below reads as the start of a new section rather than a
+	// continuation of the message.
+	//
+	// `.asterism-comments-note` is added by our own filter — Friends
+	// returns that message as a bare string with no element to hang styles on.
+	// `.friends-activitypub-comment-unavailable` is Friends' own equivalent
+	// (class-feed-parser-activitypub.php:4972), styled the same way for consistency.
+	.asterism-comments-note,
+	.friends-activitypub-comment-unavailable {
+		margin: 0 0 1rem;
+		font-size: .9rem;
+		line-height: 1.45;
+		color: #5c6470; // 5.62:1 on the light card
+	}
+
+	// Kill the heading's own top margin so the 1rem above is the whole gap.
+	.comment-reply-title {
+		margin-top: 0;
+		margin-bottom: .5rem;
+	}
+}
+
+@media (prefers-color-scheme: dark) {
+
+	.friends-page {
+
+		.comment-form-comment textarea,
+		.comment-form textarea,
+		.comment-respond textarea {
+			background: #313443;
+			color: #fff; // 12.33:1
+			border-color: #6b7183; // 3.26:1 against the dark page background
+		}
+
+		.comment-form-comment textarea::placeholder,
+		.comment-respond textarea::placeholder {
+			color: #b9bfcb; // 6.68:1
+		}
+
+		.form-submit .submit,
+		.comment-respond input[type="submit"] {
+			background: #313443;
+			color: #fff; // 12.33:1
+			border-color: #6b7183; // 3.26:1
+		}
+
+		.asterism-comments-note,
+		.friends-activitypub-comment-unavailable {
+			color: #b9bfcb; // 6.68:1 on the dark card
+		}
+
+		.comment-form-comment textarea:focus-visible,
+		.form-submit .submit:focus-visible,
+		.comment-respond input[type="submit"]:focus-visible {
+			outline-color: #8ab4ff; // 7.59:1
+		}
+	}
+}
+
+// Respect a reduced-motion preference for anything Spectre animates.
+@media (prefers-reduced-motion: reduce) {
+
+	.friends-page *,
+	.friends-page *::before,
+	.friends-page *::after {
+		animation-duration: .01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: .01ms !important;
+		scroll-behavior: auto !important;
+	}
+}
+
+// ---------------------------------------------------------------------------
+// 3. Desktop restores the original side-by-side header
+// ---------------------------------------------------------------------------
+
+@media (min-width: $off-canvas-breakpoint) {
+
+	.friends-page .off-canvas-content header.navbar {
+
+		section.navbar-section.author {
+			flex: 3 1 auto;
+		}
+
+		section.navbar-section.search {
+			flex: 1 1 auto;
+		}
+
+		section.navbar-section.search form {
+			width: auto;
+		}
+
+		#page-title {
+			margin-left: 0;
+			font-size: inherit;
+		}
+	}
+
+	.friends-page article.format-status div.teaser {
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		width: calc(100% - 25em);
+	}
+}
