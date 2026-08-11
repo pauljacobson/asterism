@@ -10,7 +10,8 @@ work, and unhides the ActivityPub Boost button.
 
 Built on the design of [FediPress](https://github.com/alquimidia/fedipress) by
 Lívia Gouvêa — see [Credits](#credits). Every change made against it, and the
-measurements behind them, are recorded in **[FORK.md](FORK.md)**.
+measurements behind them, are recorded in the wiki:
+**[Changes against upstream](https://github.com/pauljacobson/asterism/wiki/Asterism:-changes-against-upstream)**.
 
 > **as·ter·ism** *n.* — a prominent pattern of stars that is not one of the 88 official
 > constellations: the Plough, the Summer Triangle, the Belt. Shapes named by the people
@@ -133,10 +134,11 @@ WordPress itself is "GPLv2 or later", and the WordPress.org plugin guidelines ac
 
 ## What this changes, and why
 
-The full record lives in **[FORK.md](FORK.md)**: every change against FediPress with the
-line references behind it, why the Boost button was hidden, what Reblog does that Boost
-doesn't, the WCAG measurements, a WordPress standards review, and the content analysis
-that falsified the original diagnosis.
+The full record lives in the wiki —
+**[Changes against upstream](https://github.com/pauljacobson/asterism/wiki/Asterism:-changes-against-upstream)**:
+every change against FediPress with the line references behind it, why the Boost button
+was hidden, what Reblog does that Boost doesn't, the WCAG measurements, a WordPress
+standards review, and the content analysis that falsified the original diagnosis.
 
 Short version — Asterism:
 
