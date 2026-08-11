@@ -120,6 +120,16 @@ add_action(
 				'textExpandPost'   => __( 'Expanded mode', 'friends' ),
 			)
 		);
+
+		$navigation_js = ASTERISM_PLUGIN_DIR . 'js/navigation.js';
+		// Run after Friends' delegated anchor-dropdown handler.
+		wp_enqueue_script(
+			'asterism-navigation',
+			plugins_url( 'js/navigation.js', __FILE__ ),
+			array( 'friends' ),
+			file_exists( $navigation_js ) ? (string) filemtime( $navigation_js ) : \Friends\Friends::VERSION,
+			true
+		);
 	}
 );
 
