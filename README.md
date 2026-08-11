@@ -44,7 +44,7 @@ that silently does nothing.
 
 ```sh
 cd wp-content/plugins
-git clone https://github.com/<you>/asterism.git
+git clone https://github.com/pauljacobson/asterism.git
 wp plugin activate asterism
 ```
 
@@ -103,14 +103,28 @@ FediPress in turn is a theme for [Friends](https://github.com/akirk/friends) by
 
 ## Licence
 
-**AGPL-3.0-or-later.** See [`LICENSE`](LICENSE).
+**GPL-3.0-or-later.** See [`LICENSE`](LICENSE).
 
-A note on why: upstream FediPress's plugin header says `License: GPL3`, but the `LICENSE`
-file it ships is the GNU **Affero** GPL v3 — it contains section 13, "Remote Network
-Interaction" — and GitHub detects the repository as `AGPL-3.0`. A committed licence text
-outweighs a one-line header, so this fork is AGPL-3.0-or-later: the reading that grants at
-least what upstream grants, rather than quietly dropping the network clause. If upstream
-clarifies that GPL-3.0 was intended, this can be revisited.
+A note on why, because upstream is ambiguous. FediPress states `GPL-3` in **both** its
+README and its plugin header, but the `LICENSE` file it ships is the GNU **Affero** GPL
+v3, so GitHub detects that repository as `AGPL-3.0`.
+
+Two human-authored statements of intent outweigh one file. AGPL-3.0 also sits directly
+beside GPL-3.0 in GitHub's "Add a license" picker, which makes a mis-selection the
+likeliest explanation for the contradiction.
+
+GPL-3.0-or-later is the safer reading in the direction that matters, too. GPLv3 §7 does
+not permit a downstream to add a network-use requirement, so publishing a derivative of
+GPL-3.0 work under AGPL-3.0 would impose a condition the original author never granted.
+GPLv3 §13 permits *combining* with AGPL-licensed work; it does not permit *converting*
+GPL work into it.
+
+This is asked about upstream at
+[alquimidia/fedipress](https://github.com/alquimidia/fedipress) and will be revisited if
+AGPL-3.0 turns out to have been intended.
+
+WordPress itself is "GPLv2 or later", and the WordPress.org plugin guidelines accept
+"any GPL-compatible license", so GPL-3.0-or-later is fine for distribution either way.
 
 ---
 

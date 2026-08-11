@@ -7,20 +7,27 @@
  * Requires at least: 6.5
  * Requires PHP: 7.4
  * Requires Plugins: friends
- * License: AGPL-3.0-or-later
- * License URI: https://www.gnu.org/licenses/agpl-3.0.html
+ * License: GPL-3.0-or-later
+ * License URI: https://www.gnu.org/licenses/gpl-3.0.html
  * Text Domain: friends
  * Update URI: false
  *
  * Based on FediPress 1.0.2 by Lívia Gouvêa — https://github.com/alquimidia/fedipress
  * Its design is retained; see README.md for every change made against it.
  *
- * Licensing note: upstream's plugin header says "GPL3", but the LICENSE file it
- * ships is the GNU Affero GPL v3 (it contains section 13, Remote Network
- * Interaction), and GitHub detects the repository as AGPL-3.0. A committed
- * licence text outweighs a header string, so this fork is AGPL-3.0-or-later —
- * the reading that grants at least what upstream grants rather than quietly
- * dropping the network clause.
+ * Licensing note: upstream states GPL-3 in both its README and its plugin
+ * header, but the LICENSE file it ships is the GNU Affero GPL v3, so GitHub
+ * detects that repository as AGPL-3.0. Two human-authored statements of intent
+ * outweigh one file — and AGPL-3.0 sits directly beside GPL-3.0 in GitHub's
+ * licence picker, which makes a mis-selection the likeliest explanation.
+ *
+ * GPL-3.0-or-later is also the safer choice in the direction that matters.
+ * GPLv3 section 7 does not permit a downstream to add a network-use
+ * requirement, so publishing a derivative of GPL-3.0 work under AGPL-3.0 would
+ * impose a term the original author never granted. Section 13 permits
+ * combining with AGPL work; it does not permit converting GPL work into it.
+ *
+ * To be revisited if upstream confirms AGPL-3.0 was intended.
  *
  * Notes on two headers that look wrong but are deliberate:
  *
