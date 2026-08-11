@@ -1,0 +1,305 @@
+// Friends 4.1+ frontend Add Friend workflow.
+//
+// Friends creates the review and result panels dynamically. Asterism keeps
+// those templates and scripts authoritative and supplies only presentation.
+
+.friends-page section.add-friend-subscriptions {
+	display: grid;
+	gap: .8rem;
+
+	.card {
+		margin: 0;
+		border: 1px solid #848c96;
+		border-radius: .2rem;
+	}
+
+	.card-body {
+		padding: .8rem;
+	}
+
+	.hidden {
+		display: none;
+	}
+
+	.add-subscription-input {
+		display: flex;
+		align-items: flex-start;
+		gap: .6rem;
+
+		.form-input {
+			flex: 1 1 auto;
+			width: 100%;
+			min-height: 5.6rem;
+			margin: 0;
+			resize: vertical;
+		}
+
+		.btn {
+			flex: 0 0 auto;
+			min-height: 2rem;
+			margin: 0;
+		}
+	}
+
+	.opml-file-hint,
+	.subscription-preview-description,
+	.subscription-feed-details,
+	.subscription-preview-status,
+	.bulk-feed-status {
+		color: #5c6470;
+		font-size: .75rem;
+		line-height: 1.45;
+	}
+
+	.opml-file-hint {
+		margin: .6rem 0 0;
+
+		label {
+			display: block;
+			margin-bottom: .25rem;
+		}
+
+		input[type="file"] {
+			max-width: 100%;
+		}
+	}
+
+	#preview-subscription:not(:empty) {
+		margin-top: .8rem;
+	}
+
+	.subscription-preview-results,
+	.bulk-feed-list,
+	.subscription-feed-list {
+		display: grid;
+		gap: .6rem;
+		margin: .8rem 0 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.subscription-feed-list.hidden {
+		display: none;
+	}
+
+	.bulk-controls,
+	.subscription-bulk-actions,
+	.subscription-feed-actions,
+	.subscription-preview-actions {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: .4rem;
+		margin-top: .8rem;
+
+		.btn {
+			min-height: 2rem;
+		}
+	}
+
+	.bulk-skip-entry {
+		margin-left: .35rem;
+	}
+
+	.bulk-feed-row,
+	.subscription-feed-option {
+		padding: .65rem .75rem;
+		background: #eef0f3;
+		border: 1px solid #848c96;
+		border-radius: .2rem;
+	}
+
+	.bulk-feed-row > label,
+	.subscription-feed-option > label {
+		display: block;
+		font-weight: 600;
+		overflow-wrap: anywhere;
+
+		small {
+			display: block;
+			margin-top: .15rem;
+			color: #5c6470;
+			font-weight: 400;
+		}
+	}
+
+	.bulk-feed-row.is-reviewing > .label-for-bulkfeed,
+	.bulk-feed-row.is-reviewing > .bulk-feed-status {
+		display: none;
+	}
+
+	.bulk-feed-review {
+		margin-top: .6rem;
+	}
+
+	.feed-preview,
+	.subscription-feed-preview {
+		padding: .6rem;
+		margin-top: .6rem;
+		background: #fff;
+		border: 1px solid #848c96;
+		border-radius: .2rem;
+	}
+
+	.feed-preview {
+		border-left: 3px solid #2e5bec;
+	}
+
+	.bulk-feed-review .feed-preview {
+		padding: 0;
+		margin-top: 0;
+		background: transparent;
+		border: 0;
+	}
+
+	.subscription-preview-header,
+	.subscribe-success {
+		display: flex;
+		align-items: center;
+		gap: .6rem;
+
+		.avatar {
+			flex: 0 0 auto;
+			border-radius: 50%;
+		}
+	}
+
+	.subscription-preview-title,
+	.subscription-feed-preview-title {
+		display: flex;
+		flex-direction: column;
+		gap: .1rem;
+		min-width: 0;
+
+		small {
+			color: #5c6470;
+			font-size: .7rem;
+			overflow-wrap: anywhere;
+		}
+	}
+
+	.subscription-preview-description {
+		margin: .6rem 0;
+	}
+
+	.subscription-settings,
+	.subscription-feed-controls {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: .6rem;
+		margin-top: .7rem;
+
+		label {
+			display: grid;
+			gap: .2rem;
+			font-size: .7rem;
+			font-weight: 600;
+		}
+
+		.btn {
+			align-self: end;
+			justify-self: start;
+		}
+	}
+
+	.subscription-feed-url-label {
+		grid-column: 1 / -1;
+	}
+
+	.subscription-feed-details {
+		margin: .5rem 0 0;
+		overflow-wrap: anywhere;
+	}
+
+	.subscription-feed-preview {
+		ul {
+			display: grid;
+			gap: .55rem;
+			margin: 0;
+			padding: 0;
+			list-style: none;
+		}
+
+		p {
+			margin: .25rem 0 0;
+			color: #5c6470;
+			font-size: .75rem;
+		}
+	}
+
+	.error,
+	.subscription-preview-status.error,
+	.bulk-feed-status.error {
+		color: #b42318;
+	}
+
+	.form-input:focus-visible,
+	.form-select:focus-visible,
+	.btn:focus-visible,
+	input[type="file"]:focus-visible {
+		outline: 2px solid #2e5bec;
+		outline-offset: 2px;
+	}
+}
+
+@media (max-width: 640px) {
+	.friends-page section.add-friend-subscriptions {
+		.add-subscription-input {
+			flex-direction: column;
+
+			.btn {
+				width: 100%;
+			}
+		}
+
+		.subscription-settings,
+		.subscription-feed-controls {
+			grid-template-columns: 1fr;
+		}
+
+		.subscription-preview-actions .btn,
+		.subscription-feed-actions .btn,
+		.bulk-controls .btn {
+			width: 100%;
+		}
+	}
+}
+
+@media (prefers-color-scheme: dark) {
+	.friends-page section.add-friend-subscriptions {
+		.card,
+		.bulk-feed-row,
+		.subscription-feed-option,
+		.feed-preview,
+		.subscription-feed-preview {
+			background: #313443;
+			border-color: #6b7183;
+		}
+
+		.opml-file-hint,
+		.subscription-preview-description,
+		.subscription-feed-details,
+		.subscription-preview-status,
+		.bulk-feed-status,
+		.bulk-feed-row > label small,
+		.subscription-feed-option > label small,
+		.subscription-preview-title small,
+		.subscription-feed-preview-title small,
+		.subscription-feed-preview p {
+			color: #b9bfcb;
+		}
+
+		.error,
+		.subscription-preview-status.error,
+		.bulk-feed-status.error {
+			color: #ff8a80;
+		}
+
+		.form-input:focus-visible,
+		.form-select:focus-visible,
+		.btn:focus-visible,
+		input[type="file"]:focus-visible {
+			outline-color: #8ab4ff;
+		}
+	}
+}

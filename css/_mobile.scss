@@ -253,9 +253,27 @@
 }
 
 .friends-page #friends-sidebar .form-input:focus-visible,
-.friends-page #friends-sidebar .btn:focus-visible {
+.friends-page #friends-sidebar .btn:focus-visible,
+.friends-page #friends-sidebar a:focus-visible,
+.friends-page #friends-sidebar summary:focus-visible {
 	outline: 2px solid #8ab4ff;
 	outline-offset: 2px;
+}
+
+// Friends widgets use disclosure summaries and compact heading links. Give
+// those controls a full 24px target without changing the widgets' behaviour.
+.friends-page #friends-sidebar .friends-widget h5 > a,
+.friends-page #friends-sidebar .friends-brand a {
+	display: inline-flex;
+	align-items: center;
+	min-height: 1.2rem;
+}
+
+.friends-page #friends-sidebar summary {
+	display: flex;
+	align-items: center;
+	min-height: 1.2rem;
+	width: 100%;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -438,6 +456,13 @@
 @media (prefers-color-scheme: dark) {
 
 	.friends-page {
+		img.avatar.avatar-overlay {
+			box-shadow: 0 0 0 2px #313443;
+		}
+
+		.mention-indicator {
+			color: #ff8a80;
+		}
 
 		.comment-form-comment textarea,
 		.comment-form textarea,
