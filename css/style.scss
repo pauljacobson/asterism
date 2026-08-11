@@ -1129,6 +1129,7 @@ h2#page-title a.dashicons {
 // Current Friends feature modules. Mobile must remain the final import so its
 // equal-specificity corrections continue to win by source order.
 @import "friends-lists";
+@import "add-friend";
 
 // Fork additions — must stay last so its rules take precedence.
 @import "mobile";
