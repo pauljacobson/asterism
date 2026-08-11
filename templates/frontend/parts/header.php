@@ -127,9 +127,9 @@ $author_url = apply_filters( 'friends_author_url', $friend_user->get_local_frien
 		 * Muffle, Trash). Two identical burger menus per post is noise on a
 		 * phone, so this one is removed.
 		 *
-		 * Note parts/header-status.php has a similar dropdown that ALSO
-		 * carries a "Reply" item the footer lacks — do not delete that one
-		 * without relocating Reply first.
+		 * Status posts retain their header dropdown because Friends and its
+		 * feed parsers add context-specific actions there through the current
+		 * frontend/parts/header-menu extension point.
 		 */
 		?>
 
