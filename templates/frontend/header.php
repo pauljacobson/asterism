@@ -112,13 +112,13 @@ add_filter(
 		</div>
 	</div>
 
-	<a class="off-canvas-overlay" href="#close"></a>
+	<a class="off-canvas-overlay" href="#close" aria-label="<?php esc_attr_e( 'Close sidebar', 'friends' ); ?>"></a>
 
 	<div class="off-canvas-content">
 		<header class="<?php echo is_single() ? '' : 'navbar'; ?><?php echo ( isset( $args['no-bottom-margin'] ) && $args['no-bottom-margin'] ) ? ' no-bottom-margin' : ''; ?>">
 			<section class="navbar-section author">
-			<a class="off-canvas-toggle btn btn-primary bt-action" href="#friends-sidebar">
-				<span class="ab-icon dashicons dashicons-menu-alt2"></span>
+			<a class="off-canvas-toggle btn btn-primary bt-action" href="#friends-sidebar" aria-label="<?php esc_attr_e( 'Open sidebar', 'friends' ); ?>" aria-controls="friends-sidebar" aria-expanded="false">
+				<span class="ab-icon dashicons dashicons-menu-alt2" aria-hidden="true"></span>
 			</a>
 			<?php
 			if ( $args['friend_user'] && $args['friend_user'] instanceof Friends\User && is_singular() ) {

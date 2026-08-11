@@ -207,11 +207,28 @@
 	opacity: 1;
 }
 
+// Menu controls are managed by navigation.js, not the inherited focus-only CSS.
+// An inline display value set by the script takes precedence when a menu is open.
+.friends-page .friends-dropdown > .friends-dropdown-toggle:focus + .menu {
+	display: none;
+}
+
+.friends-page .friends-dropdown-toggle {
+	min-width: 2rem;
+	min-height: 2rem;
+}
+
 .friends-page .navbar-section.search .form-input:focus-visible,
 .friends-page .navbar-section.search .btn:focus-visible,
-.friends-page .off-canvas-toggle:focus-visible {
+.friends-page .off-canvas-toggle:focus-visible,
+.friends-page .friends-dropdown-toggle:focus-visible {
 	outline: 2px solid #2e5bec;
 	outline-offset: 2px;
+}
+
+.friends-page .off-canvas-overlay:focus-visible {
+	outline: 2px solid #2e5bec;
+	outline-offset: -4px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -230,8 +247,13 @@
 	.friends-page #main-header .chip:focus-visible,
 	.friends-page .navbar-section.search .form-input:focus-visible,
 	.friends-page .navbar-section.search .btn:focus-visible,
-	.friends-page .off-canvas-toggle:focus-visible {
+	.friends-page .off-canvas-toggle:focus-visible,
+	.friends-page .friends-dropdown-toggle:focus-visible {
 		outline-color: #8ab4ff; // 7.59:1 against the dark page background
+	}
+
+	.friends-page .off-canvas-overlay:focus-visible {
+		outline-color: #8ab4ff;
 	}
 
 	// Upstream's dark block never restyles .form-input, so Spectre leaves the

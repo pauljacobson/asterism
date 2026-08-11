@@ -123,10 +123,10 @@ $avatar = apply_filters( 'friends_author_avatar_url', $avatar, $friend_user, get
 		</a>
 
 		<div class="friends-dropdown friends-dropdown-right">
-			<a class="btn btn-link friends-dropdown-toggle" tabindex="0">
-				<i class="dashicons dashicons-menu-alt2"></i>
-			</a>
-			<ul class="menu" style="min-width: <?php echo esc_attr( intval( _x( '250', 'dropdown-menu-width', 'friends' ) ) ); ?>px">
+			<button type="button" class="btn btn-link friends-dropdown-toggle" aria-expanded="false" aria-haspopup="true" aria-controls="asterism-status-menu-<?php echo esc_attr( get_the_ID() ); ?>" aria-label="<?php esc_attr_e( 'Menu', 'friends' ); ?>">
+				<i class="dashicons dashicons-menu-alt2" aria-hidden="true"></i>
+			</button>
+			<ul id="asterism-status-menu-<?php echo esc_attr( get_the_ID() ); ?>" class="menu" style="min-width: <?php echo esc_attr( intval( _x( '250', 'dropdown-menu-width', 'friends' ) ) ); ?>px">
 				<li class="menu-item"><a href="<?php echo esc_url( add_query_arg( 'in_reply_to', get_permalink() ) ); ?>" class="quick-reply" data-url="<?php echo esc_attr( get_permalink() ); ?>"><?php esc_html_e( 'Reply', 'friends' ); ?></a></li>
 				<?php
 					Friends\Friends::template_loader()->get_template_part(
@@ -140,4 +140,3 @@ $avatar = apply_filters( 'friends_author_avatar_url', $avatar, $friend_user, get
 
 	</div>
 </header>
-
