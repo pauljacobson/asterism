@@ -93,6 +93,13 @@ node css/check-contrast.mjs   # WCAG ratios for every colour pair; exits non-zer
 `check-overflow.js` is pasted into DevTools on `/friends/` at a phone width; it lists any
 element wider than the viewport.
 
+## Contributing
+
+Requirements are in **[AGENTS.md](AGENTS.md)** — branch and PR workflow, the checks to run
+before pushing, coding standards, and a list of things that look like bugs but are
+deliberate. Written with AI coding agents in mind, since that is how most changes here
+arrive, but it applies to everyone.
+
 ## Credits
 
 Asterism is based on **[FediPress](https://github.com/alquimidia/fedipress) 1.0.2** by

@@ -1,0 +1,6 @@
+# Keep contributor docs out of the release zip built with `git archive`.
+# They are for people working on Asterism, not for people installing it.
+.gitattributes  export-ignore
+AGENTS.md       export-ignore
+CLAUDE.md       export-ignore
+CONTRIBUTING.md export-ignore
