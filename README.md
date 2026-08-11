@@ -102,6 +102,8 @@ making controls work that were bound to another theme. The visual identity is he
 FediPress in turn is a theme for [Friends](https://github.com/akirk/friends) by
 **Alex Kirk**, which does all the actual work of following people and caching their posts.
 
+Written using an AI agent based on human input and testing.
+
 ## Licence
 
 **GPL-3.0-or-later.** See [`LICENSE`](LICENSE).
