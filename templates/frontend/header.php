@@ -50,9 +50,11 @@ add_filter(
 				<form method="post" action="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>" class="friends-post-inline" style="text-align: right;">
 					<?php wp_nonce_field( 'friends_publish' ); ?>
 					<input type="hidden" name="action" value="friends_publish" />
-					<input class="form-input" type="text" name="title" value=""  />
-					<textarea class="form-input"  name="content" rows="5" cols="70"></textarea>
-					<button class="btn btn-primary input-group-btn"><?php esc_html_e( 'Publish', 'friends' ); ?></button>
+					<label class="asterism-screen-reader-text" for="asterism-publish-title"><?php /* phpcs:ignore WordPress.WP.I18n.MissingArgDomain */ esc_html_e( 'Title' ); ?></label>
+					<input id="asterism-publish-title" class="form-input" type="text" name="title" value="" />
+					<label class="asterism-screen-reader-text" for="asterism-publish-content"><?php /* phpcs:ignore WordPress.WP.I18n.MissingArgDomain */ esc_html_e( 'Content' ); ?></label>
+					<textarea id="asterism-publish-content" class="form-input" name="content" rows="5" cols="70"></textarea>
+					<button type="submit" class="btn btn-primary input-group-btn"><?php esc_html_e( 'Publish', 'friends' ); ?></button>
 				</form>
 			</div>
 			<div class="friends-widget">
@@ -92,13 +94,14 @@ add_filter(
 					<?php wp_nonce_field( 'add-friend' ); ?>
 					<div class="form-autocomplete-input form-input">
 						<div class="has-icon-right">
-							<input class="form-input" type="text"  tabindex="2" name="friend_url" placeholder="<?php esc_attr_e( "@user@url", 'friends' ); ?>" />
-							<i class="form-icon"></i>
+							<label class="asterism-screen-reader-text" for="asterism-friend-url"><?php esc_html_e( 'Search or paste URL', 'friends' ); ?></label>
+							<input id="asterism-friend-url" class="form-input" type="text" name="friend_url" placeholder="<?php esc_attr_e( '@user@url', 'friends' ); ?>" />
+							<i class="form-icon" aria-hidden="true"></i>
 						</div>
 					</div>
-						<button class="btn btn-primary input-group-btn">
-							<span class="dashicons dashicons-search"></span>
-						</button>
+					<button type="submit" class="btn btn-primary input-group-btn" aria-label="<?php esc_attr_e( 'Search', 'friends' ); ?>">
+						<span class="dashicons dashicons-search" aria-hidden="true"></span>
+					</button>
 				</form>
 			</div>
 			<div class="friends-widget">
@@ -160,13 +163,14 @@ add_filter(
 				<form class="input-group input-inline form-autocomplete" action="<?php echo esc_url( home_url( '/friends/' ) ); ?>">
 					<div class="form-autocomplete-input form-input">
 						<div class="has-icon-right">
-							<input class="form-input" type="text" tabindex="2" name="s" placeholder="<?php /* phpcs:ignore WordPress.WP.I18n.MissingArgDomain */ esc_attr_e( 'Search or paste URL' ); ?>" value="<?php echo esc_attr( $_search ); ?>" id="master-search" autocomplete="off" data-nonce="<?php echo esc_attr( wp_create_nonce( 'friends-autocomplete' ) ); ?>" />
-							<i class="form-icon"></i>
+							<label class="asterism-screen-reader-text" for="master-search"><?php /* phpcs:ignore WordPress.WP.I18n.MissingArgDomain */ esc_html_e( 'Search or paste URL' ); ?></label>
+							<input class="form-input" type="text" name="s" placeholder="<?php /* phpcs:ignore WordPress.WP.I18n.MissingArgDomain */ esc_attr_e( 'Search or paste URL' ); ?>" value="<?php echo esc_attr( $_search ); ?>" id="master-search" autocomplete="off" data-nonce="<?php echo esc_attr( wp_create_nonce( 'friends-autocomplete' ) ); ?>" />
+							<i class="form-icon" aria-hidden="true"></i>
 						</div>
 					</div>
 					<ul class="menu" style="display: none">
 					</ul>
-					<button class="btn btn-primary input-group-btn"><?php /* phpcs:ignore WordPress.WP.I18n.MissingArgDomain */ esc_html_e( 'Search' ); ?></button>
+					<button type="submit" class="btn btn-primary input-group-btn"><?php /* phpcs:ignore WordPress.WP.I18n.MissingArgDomain */ esc_html_e( 'Search' ); ?></button>
 				</form>
 			</section>
 		</header>
