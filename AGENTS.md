@@ -42,13 +42,23 @@ did not create.
 ## Checks that must pass
 
 ```sh
-node css/check-contrast.mjs      # exits non-zero if any colour pair fails WCAG
-cd css && npm install && npm run build && git diff --stat style.css
+node css/check-contrast.mjs                       # WCAG ratios; exits non-zero on failure
+cd css && npm ci && npm run build && cd .. \
+  && git diff --exit-code css/style.css           # committed CSS must match the SCSS
 ```
 
 `check-contrast.mjs` is the one runnable guard on the accessibility work. One entry is
 labelled `BROKEN` and is *expected* to fail — it is the upstream bug this fork fixes, kept
 as a regression marker. Every other pair must pass.
+
+Use `npm ci`, not `npm install`. `spectre.css` is declared as `^0.5.9`, so `install` is
+free to resolve a newer patch and change the compiled output; `ci` installs exactly what
+`package-lock.json` pins. Reproducible output is what makes the next check meaningful.
+
+`css/style.css` is generated but committed, so the plugin works from a bare `git clone`.
+That means the two can silently disagree: edit `_mobile.scss`, forget to rebuild, and the
+plugin ships the old stylesheet with nothing erroring. `git diff --exit-code` after a clean
+build is what catches it — if it prints anything, you have not committed your own change.
 
 The build prints Dart Sass deprecation warnings about `@import` (inherited from Spectre.css
 and from `style.scss` itself). They are expected. Do not migrate to `@use` as a drive-by
