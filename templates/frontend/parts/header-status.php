@@ -118,9 +118,9 @@ $avatar = apply_filters( 'friends_author_avatar_url', $avatar, $friend_user, get
 		<?php echo wp_kses( str_replace( '/p>', '/p> ', preg_replace( '#<span class="invisible">.*?</span>#', '', get_the_content() ) ), array( 'a' => array( 'href' => array() ) ) ); ?>
 	</div>
 	<div class="overflow col-ml-auto">
-		<a class="btn btn-link collapse-post" tabindex="0" title="<?php esc_html_e( 'Double or meta/shift/cmd click to toggle all', 'friends' ); ?>">
-			<i class="dashicons dashicons-fullscreen-exit-alt"></i>
-		</a>
+		<button type="button" class="btn btn-link collapse-post" aria-expanded="true" aria-label="<?php esc_attr_e( 'Compact mode', 'friends' ); ?>">
+			<i class="dashicons dashicons-fullscreen-exit-alt" aria-hidden="true"></i>
+		</button>
 
 		<div class="friends-dropdown friends-dropdown-right">
 			<a class="btn btn-link friends-dropdown-toggle" tabindex="0">
@@ -140,4 +140,3 @@ $avatar = apply_filters( 'friends_author_avatar_url', $avatar, $friend_user, get
 
 	</div>
 </header>
-

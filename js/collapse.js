@@ -2,7 +2,7 @@
  * Collapse/expand behaviour for the Asterism theme.
  *
  * Friends renders both controls in shared templates — the `a.toggle-compact`
- * chip in the feed header, and an `a.collapse-post` button on every post — but
+ * chip in the feed header, and a `.collapse-post` button on every post — but
  * their handlers live in friends-default-theme.js, which Friends enqueues only
  * from Frontend::default_theme(). Under any other theme both controls are inert.
  *
@@ -31,7 +31,7 @@
 	/**
 	 * Swap a collapse button's icon to match its post's state.
 	 *
-	 * @param {Element} button    The a.collapse-post element.
+	 * @param {Element} button    The .collapse-post button.
 	 * @param {boolean} collapsed Whether its post is now collapsed.
 	 */
 	function updatePostIcon( button, collapsed ) {
@@ -41,6 +41,10 @@
 			icon.classList.toggle( 'dashicons-fullscreen-exit-alt', ! collapsed );
 		}
 		button.setAttribute( 'aria-expanded', collapsed ? 'false' : 'true' );
+		var label = collapsed ? config.textExpandPost : config.textCollapsePost;
+		if ( label ) {
+			button.setAttribute( 'aria-label', label );
+		}
 	}
 
 	/**
@@ -50,14 +54,21 @@
 	 */
 	function updateChips( collapsed ) {
 		var label = collapsed ? config.textExpanded : config.textCompact;
+		var section = postsSection();
+		if ( section && ! section.id ) {
+			section.id = 'asterism-feed-posts';
+		}
 
 		Array.prototype.forEach.call( document.querySelectorAll( 'a.toggle-compact' ), function ( chip ) {
 			if ( label ) {
 				chip.textContent = label;
 			}
-			// An anchor acting as a toggle button; announce that to screen readers.
+			// The label describes the next action; aria-expanded describes the feed.
 			chip.setAttribute( 'role', 'button' );
-			chip.setAttribute( 'aria-pressed', collapsed ? 'true' : 'false' );
+			chip.setAttribute( 'aria-expanded', collapsed ? 'false' : 'true' );
+			if ( section ) {
+				chip.setAttribute( 'aria-controls', section.id );
+			}
 		} );
 	}
 
@@ -105,7 +116,7 @@
 			// otherwise posts opened earlier stay open and the toggle looks broken.
 			Array.prototype.forEach.call( section.querySelectorAll( 'article' ), function ( article ) {
 				article.classList.remove( 'uncollapsed', 'collapsed' );
-				var button = article.querySelector( 'a.collapse-post' );
+				var button = article.querySelector( '.collapse-post' );
 				if ( button ) {
 					updatePostIcon( button, allCollapsed );
 				}
@@ -117,7 +128,7 @@
 		}
 
 		// --- Per-post toggle --------------------------------------------------
-		var button = event.target.closest( 'a.collapse-post' );
+		var button = event.target.closest( '.collapse-post' );
 		if ( ! button ) {
 			return;
 		}
@@ -129,7 +140,7 @@
 			event.target.closest( 'form' ) ||
 			event.target.closest( 'textarea' ) ||
 			event.target.closest( 'input' ) ||
-			event.target.closest( 'button' ) ||
+			event.target.closest( 'button:not(.collapse-post)' ) ||
 			event.target.closest( 'label' )
 		) {
 			return;
@@ -153,6 +164,19 @@
 		updatePostIcon( button, collapsed );
 	} );
 
+	document.addEventListener( 'keydown', function ( event ) {
+		if ( ! event.target.closest ) {
+			return;
+		}
+
+		var chip = event.target.closest( 'a.toggle-compact' );
+		if ( chip && ( ' ' === event.key || 'Spacebar' === event.key ) ) {
+			// Anchors activate with Enter; role="button" also requires Space.
+			event.preventDefault();
+			chip.click();
+		}
+	} );
+
 	// Set initial state from what the server rendered.
 	document.addEventListener( 'DOMContentLoaded', function () {
 		var section = postsSection();
@@ -163,7 +187,7 @@
 		var allCollapsed = section.classList.contains( 'all-collapsed' );
 		updateChips( allCollapsed );
 
-		Array.prototype.forEach.call( section.querySelectorAll( 'a.collapse-post' ), function ( button ) {
+		Array.prototype.forEach.call( section.querySelectorAll( '.collapse-post' ), function ( button ) {
 			var article = button.closest( 'article' );
 			updatePostIcon( button, allCollapsed && ( ! article || ! article.classList.contains( 'uncollapsed' ) ) );
 		} );

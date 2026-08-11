@@ -207,9 +207,16 @@
 	opacity: 1;
 }
 
+// The icon-only per-post control needs the same 24px minimum target as the chips.
+.friends-page .collapse-post {
+	min-width: 2rem;
+	min-height: 2rem;
+}
+
 .friends-page .navbar-section.search .form-input:focus-visible,
 .friends-page .navbar-section.search .btn:focus-visible,
-.friends-page .off-canvas-toggle:focus-visible {
+.friends-page .off-canvas-toggle:focus-visible,
+.friends-page .collapse-post:focus-visible {
 	outline: 2px solid #2e5bec;
 	outline-offset: 2px;
 }
@@ -230,7 +237,8 @@
 	.friends-page #main-header .chip:focus-visible,
 	.friends-page .navbar-section.search .form-input:focus-visible,
 	.friends-page .navbar-section.search .btn:focus-visible,
-	.friends-page .off-canvas-toggle:focus-visible {
+	.friends-page .off-canvas-toggle:focus-visible,
+	.friends-page .collapse-post:focus-visible {
 		outline-color: #8ab4ff; // 7.59:1 against the dark page background
 	}
 
