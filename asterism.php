@@ -104,8 +104,8 @@ add_action(
 			'asterism-collapse',
 			'asterism',
 			array(
-				'ajaxUrl'      => admin_url( 'admin-ajax.php' ),
-				'nonce'        => wp_create_nonce( 'asterism-view' ),
+				'ajaxUrl'          => admin_url( 'admin-ajax.php' ),
+				'nonce'            => wp_create_nonce( 'asterism-view' ),
 				/*
 				 * Deliberately shorter than Friends' own "Compact mode" /
 				 * "Expanded mode": the chip sits in a wrapping row on a phone, and
@@ -113,8 +113,11 @@ add_action(
 				 * this plugin ships no translations of its own, and these are not
 				 * Friends' strings to look up.
 				 */
-				'textCompact'  => 'Compact',
-				'textExpanded' => 'Expand',
+				'textCompact'      => 'Compact',
+				'textExpanded'     => 'Expand',
+				/* Reuse Friends' translated mode names for icon-only post controls. */
+				'textCollapsePost' => __( 'Compact mode', 'friends' ),
+				'textExpandPost'   => __( 'Expanded mode', 'friends' ),
 			)
 		);
 	}
