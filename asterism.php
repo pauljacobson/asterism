@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Asterism
  * Description: A mobile-first reader theme for the Friends plugin. Restores the feed header, meets WCAG AA, and makes the collapse controls work.
- * Version: 1.1.0
+ * Version: 1.1.1
  * Author: Paul Jacobson
  * Requires at least: 6.5
  * Requires PHP: 7.4
