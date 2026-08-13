@@ -317,6 +317,43 @@
 }
 
 // ---------------------------------------------------------------------------
+// 2d. Make links distinguishable in dark-mode post content
+// ---------------------------------------------------------------------------
+//
+// Dark mode renders both post text and links in white, so colour alone gives no
+// indication that inline text is interactive. Keep the inherited palette, but
+// add a persistent underline as a non-colour cue. Button-like links are excluded
+// because their shape and placement already communicate interactivity.
+
+@media (prefers-color-scheme: dark) {
+
+	.friends-page section.posts article {
+
+		.card-body,
+		div.teaser {
+
+			a:any-link:not(.btn):not(.button):not(.wp-element-button):not([role="button"]) {
+				text-decoration: underline;
+				text-decoration-thickness: .08em;
+				text-underline-offset: .15em;
+				text-decoration-skip-ink: auto;
+
+				&:hover,
+				&:focus-visible,
+				&:active {
+					text-decoration-thickness: .12em;
+				}
+
+				&:focus-visible {
+					outline: 2px solid #8ab4ff;
+					outline-offset: 2px;
+				}
+			}
+		}
+	}
+}
+
+// ---------------------------------------------------------------------------
 // 2e. Post footer actions: show Boost, and let the row wrap
 // ---------------------------------------------------------------------------
 //
