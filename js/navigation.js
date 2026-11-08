@@ -21,6 +21,32 @@
 	}
 
 	/**
+	 * Keep an open dropdown within the viewport when the action row wraps.
+	 *
+	 * @param {Element} trigger The dropdown control.
+	 * @param {Element} menu    The visible dropdown.
+	 */
+	function fitDropdown( trigger, menu ) {
+		var gutter = 8;
+		var viewportWidth = document.documentElement.clientWidth;
+
+		menu.style.setProperty( '--asterism-menu-limit', ( viewportWidth - 2 * gutter ) + 'px' );
+		menu.style.setProperty( '--asterism-menu-minimum', menu.style.minWidth );
+		menu.style.removeProperty( '--asterism-menu-shift' );
+
+		var bounds = menu.getBoundingClientRect();
+		if ( bounds.left >= gutter && bounds.right <= viewportWidth - gutter ) {
+			return;
+		}
+
+		// Try the other edge of the trigger, then clamp if neither edge fits.
+		var anchor = trigger.getBoundingClientRect();
+		var preferredLeft = bounds.left < gutter ? anchor.left : anchor.right - bounds.width;
+		var left = Math.max( gutter, Math.min( preferredLeft, viewportWidth - gutter - bounds.width ) );
+		menu.style.setProperty( '--asterism-menu-shift', ( left - bounds.left ) + 'px' );
+	}
+
+	/**
 	 * Close every dropdown except an optional retained trigger.
 	 *
 	 * @param {Element|null} except Trigger to leave open.
@@ -80,6 +106,9 @@
 			closeDropdowns( trigger );
 			menu.style.display = willOpen ? 'block' : 'none';
 			trigger.setAttribute( 'aria-expanded', willOpen ? 'true' : 'false' );
+			if ( willOpen ) {
+				fitDropdown( trigger, menu );
+			}
 			return;
 		}
 
@@ -114,7 +143,14 @@
 	} );
 
 	window.addEventListener( 'hashchange', updateSidebarState );
-	window.addEventListener( 'resize', updateSidebarState );
+	window.addEventListener( 'resize', function ( event ) {
+		updateSidebarState( event );
+		var trigger = document.querySelector( '.friends-dropdown-toggle[aria-expanded="true"]' );
+		var menu = trigger && dropdownMenu( trigger );
+		if ( menu ) {
+			fitDropdown( trigger, menu );
+		}
+	} );
 
 	document.addEventListener( 'DOMContentLoaded', function () {
 		var currentPage = window.location.href.split( '#' )[0];
