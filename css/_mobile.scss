@@ -1,13 +1,6 @@
 // Mobile-first corrections, imported last so these win without !important wars.
 //
-// Three groups of change:
-//   1. Upstream hides the whole feed header (chips, counts, reaction filters,
-//      search) with `display: none !important`. We want it back, laid out so it
-//      wraps instead of overflowing.
-//   2. Defensive containment for markup upstream never constrained — iframes,
-//      tables, embeds. See the note below: this is precautionary, not measured.
-//   2b. Accessibility fixes for the header restored in (1), which upstream's
-//      dark-mode block never had to style because the header was hidden.
+// Keep the header controls, post content, and comments usable on small screens.
 //
 // Spectre's $off-canvas-breakpoint (960px) is the existing desktop threshold;
 // reuse it rather than inventing a second one.
@@ -23,7 +16,7 @@
 // might carry an embed or a table. Do not cite it as evidence-based.
 
 // ---------------------------------------------------------------------------
-// 1. Restore the feed header
+// 1. Feed header and filter wrapping
 // ---------------------------------------------------------------------------
 
 // Labels that should be announced without changing the retained visual design.
@@ -42,39 +35,6 @@
 
 .friends-page {
 
-	#main-header #page-title {
-		display: block !important; // overrides upstream's hide
-	}
-
-	.off-canvas-content header.navbar {
-		display: flex !important; // overrides upstream's hide
-		flex-wrap: wrap;
-		gap: .5rem;
-		margin-bottom: 1rem;
-
-		// On a phone the title/chips block and the search box each take a full
-		// row. `min-width: 0` is what actually lets a flex child shrink below
-		// its content width — without it the search form refuses to narrow and
-		// pushes the header sideways.
-		section.navbar-section.author,
-		section.navbar-section.search {
-			flex: 1 1 100%;
-			min-width: 0;
-		}
-
-		section.navbar-section.search form {
-			width: 100%;
-		}
-
-		// The off-canvas toggle is positioned over the top-left corner, so the
-		// title needs to clear it.
-		#page-title {
-			margin-left: 3rem;
-			font-size: 1.4rem;
-			line-height: 1.2;
-		}
-	}
-
 	// Chips wrap onto as many rows as they need instead of forming one long line.
 	#main-header {
 		display: flex;
@@ -82,7 +42,8 @@
 		align-items: center;
 		gap: .35rem;
 
-		#page-title {
+		#page-title,
+		> p {
 			flex: 1 1 100%;
 		}
 
@@ -170,23 +131,11 @@
 // ---------------------------------------------------------------------------
 //
 // Spectre gives .chip a light grey background (#d5dbdf) and no colour of its
-// own. Upstream's dark-mode block sets every anchor to `color: white
-// !important`, and chips are anchors — so in dark mode they render white on
-// light grey at 1.40:1, against a WCAG AA requirement of 4.5:1.
-//
-// Upstream never hit this because it hid the header entirely. Un-hiding it in
-// section 1 is what exposed the gap, so fixing it belongs here.
-//
-// Every colour pair below is verified by `node check-contrast.mjs`.
-
-.friends-page #main-header .chip {
-	// Explicit pair rather than inheriting: 8.73:1.
-	background: #eef0f3;
-	color: #3b4351;
-
-	// The pill's own boundary against the page background, for WCAG 1.4.11
-	// (non-text contrast, 3:1). Without it the chip shape is nearly invisible.
-	border: 1px solid #848c96;
+// own. These pairs are verified by `node check-contrast.mjs`.
+.friends-page .asterism-header .chip {
+	background: var(--asterism-panel);
+	color: var(--asterism-ink) !important;
+	border: 1px solid var(--asterism-control);
 
 	// WCAG 2.5.8 (AA) wants a 24x24px minimum target. Spectre's chip is
 	// height: 1.2rem (~19px), which fails. 2rem clears it without making a
@@ -207,17 +156,32 @@
 	// makes the header look like a broken grid. Size them to their content.
 	flex: 0 1 auto;
 
-	// Keyboard focus must be visible — WCAG 2.4.7.
+	&.active,
+	&[aria-current="page"],
+	&[aria-expanded="false"] {
+		background: var(--asterism-selected);
+		color: var(--asterism-accent) !important;
+		border-color: var(--asterism-accent);
+		font-weight: 650;
+	}
+
 	&:focus-visible {
-		outline: 2px solid #2e5bec;
+		outline: 2px solid var(--asterism-accent);
 		outline-offset: 2px;
 	}
 }
 
+.friends-page .asterism-header .chip[href$="/friends/add-friend/"] {
+	background: var(--asterism-accent);
+	border-color: var(--asterism-accent);
+	color: var(--asterism-on-accent) !important;
+	font-weight: 650;
+}
+
 // The search field's placeholder: upstream forces rgb(139,139,139), which is
 // 3.41:1 on a white input. Placeholders are text and need 4.5:1.
-.friends-page .navbar-section.search .form-input::placeholder {
-	color: #5c6470 !important;
+.friends-page .asterism-header #master-search::placeholder {
+	color: var(--asterism-muted) !important;
 	opacity: 1;
 }
 
@@ -238,17 +202,20 @@
 	min-height: 2rem;
 }
 
-.friends-page .navbar-section.search .form-input:focus-visible,
-.friends-page .navbar-section.search .btn:focus-visible,
+.friends-page .asterism-header #master-search:focus-visible,
+.friends-page .asterism-header .input-group-btn:focus-visible,
+.friends-page .asterism-back-to-feed:focus-visible,
+.friends-page .asterism-read-post:focus-visible,
+.friends-page .friends-content-warning > summary:focus-visible,
 .friends-page .off-canvas-toggle:focus-visible,
 .friends-page .friends-dropdown-toggle:focus-visible,
 .friends-page .collapse-post:focus-visible {
-	outline: 2px solid #2e5bec;
+	outline: 2px solid var(--asterism-accent);
 	outline-offset: 2px;
 }
 
 .friends-page .off-canvas-overlay:focus-visible {
-	outline: 2px solid #2e5bec;
+	outline: 2px solid var(--asterism-accent);
 	outline-offset: -4px;
 }
 
@@ -256,7 +223,7 @@
 .friends-page #friends-sidebar .btn:focus-visible,
 .friends-page #friends-sidebar a:focus-visible,
 .friends-page #friends-sidebar summary:focus-visible {
-	outline: 2px solid #8ab4ff;
+	outline: 2px solid var(--asterism-accent);
 	outline-offset: 2px;
 }
 
@@ -276,46 +243,6 @@
 	width: 100%;
 }
 
-@media (prefers-color-scheme: dark) {
-
-	.friends-page #main-header .chip {
-		// White on #313443 is 12.33:1. #313443 is the surface colour upstream
-		// already uses for articles and cards, so chips sit in the same family.
-		background: #313443;
-		color: #fff;
-		border-color: #6b7183; // 3.26:1 against the dark page background
-	}
-
-	// Spectre's active chip (#2e5bec with white text) is 5.49:1 — already
-	// compliant, so it is deliberately left alone.
-
-	.friends-page #main-header .chip:focus-visible,
-	.friends-page .navbar-section.search .form-input:focus-visible,
-	.friends-page .navbar-section.search .btn:focus-visible,
-	.friends-page .off-canvas-toggle:focus-visible,
-	.friends-page .friends-dropdown-toggle:focus-visible,
-	.friends-page .collapse-post:focus-visible {
-		outline-color: #8ab4ff; // 7.59:1 against the dark page background
-	}
-
-	.friends-page .off-canvas-overlay:focus-visible {
-		outline-color: #8ab4ff;
-	}
-
-	// Upstream's dark block never restyles .form-input, so Spectre leaves the
-	// search field white — a glaring panel in an otherwise dark header, and it
-	// would strand the placeholder colour below. Bring the field into the scheme.
-	.friends-page .navbar-section.search .form-input {
-		background: #313443;
-		color: #fff; // 12.33:1
-		border-color: #6b7183;
-	}
-
-	.friends-page .navbar-section.search .form-input::placeholder {
-		color: #b9bfcb !important; // 6.68:1 on #313443
-	}
-}
-
 // ---------------------------------------------------------------------------
 // 2d. Make links distinguishable in dark-mode post content
 // ---------------------------------------------------------------------------
@@ -332,7 +259,7 @@
 		.card-body,
 		div.teaser {
 
-			a:any-link:not(.btn):not(.button):not(.wp-element-button):not([role="button"]) {
+			a:any-link:not(.btn):not(.button):not(.wp-element-button):not(.friends-link-preview):not([role="button"]) {
 				text-decoration: underline;
 				text-decoration-thickness: .08em;
 				text-underline-offset: .15em;
@@ -422,10 +349,10 @@
 		// Horizontal dragging would reintroduce the overflow.
 		resize: vertical;
 		padding: .5rem;
-		border: 1px solid #848c96;
+		border: 1px solid var(--asterism-control);
 		border-radius: .2rem;
-		background: #fff;
-		color: #3b4351; // 9.94:1
+		background: var(--asterism-raised);
+		color: var(--asterism-ink);
 		font-size: 1rem; // stops iOS Safari zooming on focus
 		line-height: 1.4;
 	}
@@ -436,16 +363,12 @@
 		margin-bottom: .25rem;
 	}
 
-	// Neutral surface rather than theme.json's wp-element-button, and rather than
-	// Spectre's primary blue: this is the same treatment as the header chips and
-	// the .btn elements upstream already styles, so the comment form reads as part
-	// of the card instead of shouting from inside it.
 	.form-submit .submit,
 	.comment-respond input[type="submit"] {
-		background: #eef0f3;
-		border: 1px solid #848c96; // 3.20:1 boundary
-		border-radius: .2rem;
-		color: #3b4351; // 8.73:1
+		background: var(--asterism-accent);
+		border: 1px solid var(--asterism-accent);
+		border-radius: .4rem;
+		color: var(--asterism-on-accent);
 		padding: .35rem 1rem;
 		min-height: 2rem; // same target size as the header chips
 		font-size: .9rem;
@@ -456,7 +379,7 @@
 	.comment-form-comment textarea:focus-visible,
 	.form-submit .submit:focus-visible,
 	.comment-respond input[type="submit"]:focus-visible {
-		outline: 2px solid #2e5bec;
+		outline: 2px solid var(--asterism-accent);
 		outline-offset: 2px;
 	}
 
@@ -480,7 +403,7 @@
 		margin: 0 0 1rem;
 		font-size: .9rem;
 		line-height: 1.45;
-		color: #5c6470; // 5.62:1 on the light card
+		color: var(--asterism-muted);
 	}
 
 	// Kill the heading's own top margin so the 1rem above is the whole gap.
@@ -490,47 +413,24 @@
 	}
 }
 
+
+.friends-page .comment-form textarea::placeholder,
+.friends-page .comment-respond textarea::placeholder {
+	color: var(--asterism-muted) !important;
+	opacity: 1;
+}
+
 @media (prefers-color-scheme: dark) {
 
 	.friends-page {
 		img.avatar.avatar-overlay {
-			box-shadow: 0 0 0 2px #313443;
+			box-shadow: 0 0 0 2px var(--asterism-panel);
 		}
 
 		.mention-indicator {
 			color: #ff8a80;
 		}
 
-		.comment-form-comment textarea,
-		.comment-form textarea,
-		.comment-respond textarea {
-			background: #313443;
-			color: #fff; // 12.33:1
-			border-color: #6b7183; // 3.26:1 against the dark page background
-		}
-
-		.comment-form-comment textarea::placeholder,
-		.comment-respond textarea::placeholder {
-			color: #b9bfcb; // 6.68:1
-		}
-
-		.form-submit .submit,
-		.comment-respond input[type="submit"] {
-			background: #313443;
-			color: #fff; // 12.33:1
-			border-color: #6b7183; // 3.26:1
-		}
-
-		.asterism-comments-note,
-		.friends-activitypub-comment-unavailable {
-			color: #b9bfcb; // 6.68:1 on the dark card
-		}
-
-		.comment-form-comment textarea:focus-visible,
-		.form-submit .submit:focus-visible,
-		.comment-respond input[type="submit"]:focus-visible {
-			outline-color: #8ab4ff; // 7.59:1
-		}
 	}
 }
 
@@ -544,38 +444,5 @@
 		animation-iteration-count: 1 !important;
 		transition-duration: .01ms !important;
 		scroll-behavior: auto !important;
-	}
-}
-
-// ---------------------------------------------------------------------------
-// 3. Desktop restores the original side-by-side header
-// ---------------------------------------------------------------------------
-
-@media (min-width: $off-canvas-breakpoint) {
-
-	.friends-page .off-canvas-content header.navbar {
-
-		section.navbar-section.author {
-			flex: 3 1 auto;
-		}
-
-		section.navbar-section.search {
-			flex: 1 1 auto;
-		}
-
-		section.navbar-section.search form {
-			width: auto;
-		}
-
-		#page-title {
-			margin-left: 0;
-			font-size: inherit;
-		}
-	}
-
-	.friends-page article.format-status div.teaser {
-		white-space: nowrap;
-		text-overflow: ellipsis;
-		width: calc(100% - 25em);
 	}
 }

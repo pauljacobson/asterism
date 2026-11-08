@@ -10,6 +10,9 @@ $_search = '';
 if ( isset( $_GET['s'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$_search = sanitize_text_field( wp_unslash( $_GET['s'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 }
+$feed_url    = home_url( '/friends/' );
+$is_single   = is_single();
+$friend_user = $args['friend_user'] ?? null;
 
 add_filter(
 	'document_title_parts',
@@ -30,18 +33,18 @@ add_filter(
 	<?php wp_head(); ?>
 </head>
 
-<body <?php body_class( 'off-canvas off-canvas-sidebar-show' ); ?>>
+<body <?php body_class( 'off-canvas off-canvas-sidebar-show' . ( $is_single ? ' asterism-reading' : '' ) ); ?>>
 	<div id="friends-sidebar" class="off-canvas-sidebar">
 		<div class="friends-brand">
 			<?php
 			/*
 			 * Upstream rendered its own logo image and the literal text "Fedipress"
 			 * here. This is a renamed fork, so shipping FediPress's mark under a
-			 * different name would be both confusing and not ours to do. Text-only
-			 * brand for now; drop an <img> back in if Asterism ever gets a mark.
+			 * different name would be both confusing and not ours to do.
 			 */
 			?>
-			<a class="friends-logo" href="<?php echo esc_url( home_url( '/friends/' ) ); ?>">
+			<a class="friends-logo" href="<?php echo esc_url( $feed_url ); ?>">
+				<span class="asterism-mark" aria-hidden="true">⁂</span>
 				<h2>Asterism</h2>
 			</a>
 			<a class="friends-sidebar-customize" href="<?php echo esc_url( add_query_arg( 'url', home_url( '/friends/' ), admin_url( 'customize.php?autofocus[section]=sidebar-widgets-friends-sidebar' ) ) ); ?>"><?php esc_html_e( 'customize sidebar', 'friends' ); ?></a>
@@ -63,19 +66,41 @@ add_filter(
 	<a class="off-canvas-overlay" href="#close" aria-label="<?php esc_attr_e( 'Close sidebar', 'friends' ); ?>"></a>
 
 	<div class="off-canvas-content">
-		<header class="<?php echo is_single() ? '' : 'navbar'; ?><?php echo ( isset( $args['no-bottom-margin'] ) && $args['no-bottom-margin'] ) ? ' no-bottom-margin' : ''; ?>">
-			<section class="navbar-section author">
-			<a class="off-canvas-toggle btn btn-primary bt-action" href="#friends-sidebar" aria-label="<?php esc_attr_e( 'Open sidebar', 'friends' ); ?>" aria-controls="friends-sidebar" aria-expanded="false">
-				<span class="ab-icon dashicons dashicons-menu-alt2" aria-hidden="true"></span>
-			</a>
+		<header class="asterism-header<?php echo ! empty( $args['no-bottom-margin'] ) ? ' no-bottom-margin' : ''; ?>">
+			<div class="asterism-mobile-header">
+				<a class="friends-logo" href="<?php echo esc_url( $feed_url ); ?>"><span class="asterism-mark" aria-hidden="true">⁂</span> Asterism</a>
+				<a class="off-canvas-toggle btn btn-primary bt-action" href="#friends-sidebar" aria-controls="friends-sidebar" aria-expanded="false">
+					<span class="dashicons dashicons-menu-alt2" aria-hidden="true"></span>
+					<?php esc_html_e( 'Menu', 'friends' ); ?>
+				</a>
+			</div>
+			<dialog class="search-dialog"></dialog>
+			<section class="navbar-section search<?php echo esc_attr( $is_single ? ' d-hide' : '' ); ?><?php echo esc_attr( ! empty( $args['hide-mobile-search'] ) ? ' hide-mobile-search' : '' ); ?>">
+				<form class="input-group input-inline form-autocomplete" action="<?php echo esc_url( $feed_url ); ?>">
+					<div class="form-autocomplete-input form-input">
+						<div class="has-icon-right">
+							<label class="asterism-screen-reader-text" for="master-search"><?php /* phpcs:ignore WordPress.WP.I18n.MissingArgDomain */ esc_html_e( 'Search or paste URL' ); ?></label>
+							<input class="form-input" type="text" name="s" placeholder="<?php /* phpcs:ignore WordPress.WP.I18n.MissingArgDomain */ esc_attr_e( 'Search or paste URL' ); ?>" value="<?php echo esc_attr( $_search ); ?>" id="master-search" autocomplete="off" data-nonce="<?php echo esc_attr( wp_create_nonce( 'friends-autocomplete' ) ); ?>" />
+							<i class="form-icon" aria-hidden="true"></i>
+						</div>
+					</div>
+					<ul class="menu" style="display: none">
+					</ul>
+					<button type="submit" class="btn btn-primary input-group-btn"><?php /* phpcs:ignore WordPress.WP.I18n.MissingArgDomain */ esc_html_e( 'Search' ); ?></button>
+				</form>
+			</section>
+			<?php if ( $is_single ) : ?>
+				<a class="asterism-back-to-feed" href="<?php echo esc_url( $feed_url ); ?>"><span class="dashicons dashicons-arrow-left-alt" aria-hidden="true"></span> <?php esc_html_e( 'Feed', 'friends' ); ?></a>
+			<?php endif; ?>
+			<div class="navbar-section author">
 			<?php
-			if ( $args['friend_user'] && $args['friend_user'] instanceof Friends\User && is_singular() ) {
+			if ( $friend_user instanceof Friends\User && $is_single ) {
 				Friends\Friends::template_loader()->get_template_part(
 					'frontend/single-header',
 					$args['post_format'],
 					$args
 				);
-			} elseif ( $args['friend_user'] && $args['friend_user'] instanceof Friends\User ) {
+			} elseif ( $friend_user instanceof Friends\User ) {
 				Friends\Friends::template_loader()->get_template_part(
 					'frontend/author-header',
 					$args['post_format'],
@@ -98,26 +123,7 @@ add_filter(
 			}
 			?>
 
-			</section>
-
-			<dialog class="search-dialog">
-			</dialog>
-
-
-			<section class="navbar-section search<?php echo esc_attr( is_singular() ? ' d-hide' : '' ); ?>">
-				<form class="input-group input-inline form-autocomplete" action="<?php echo esc_url( home_url( '/friends/' ) ); ?>">
-					<div class="form-autocomplete-input form-input">
-						<div class="has-icon-right">
-							<label class="asterism-screen-reader-text" for="master-search"><?php /* phpcs:ignore WordPress.WP.I18n.MissingArgDomain */ esc_html_e( 'Search or paste URL' ); ?></label>
-							<input class="form-input" type="text" name="s" placeholder="<?php /* phpcs:ignore WordPress.WP.I18n.MissingArgDomain */ esc_attr_e( 'Search or paste URL' ); ?>" value="<?php echo esc_attr( $_search ); ?>" id="master-search" autocomplete="off" data-nonce="<?php echo esc_attr( wp_create_nonce( 'friends-autocomplete' ) ); ?>" />
-							<i class="form-icon" aria-hidden="true"></i>
-						</div>
-					</div>
-					<ul class="menu" style="display: none">
-					</ul>
-					<button type="submit" class="btn btn-primary input-group-btn"><?php /* phpcs:ignore WordPress.WP.I18n.MissingArgDomain */ esc_html_e( 'Search' ); ?></button>
-				</form>
-			</section>
+			</div>
 		</header>
 	<?php
 	do_action( 'friends_after_header', $args );

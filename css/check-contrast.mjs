@@ -1,5 +1,5 @@
 /**
- * WCAG contrast check for the colour pairs used in _mobile.scss.
+ * WCAG contrast check for the Orbit palette and retained feature styles.
  *
  * Run: node check-contrast.mjs
  * Exits non-zero if any pair fails its stated requirement, so this is the
@@ -10,13 +10,18 @@
  *   3:1    large text, and non-text/UI boundaries (1.4.11 AA)
  */
 
+import { readFileSync } from 'node:fs';
+
 const srgb = ( c ) => {
 	const v = c / 255;
 	return v <= 0.03928 ? v / 12.92 : Math.pow( ( v + 0.055 ) / 1.055, 2.4 );
 };
 
 const luminance = ( hex ) => {
-	const h = hex.replace( '#', '' );
+	let h = hex.replace( '#', '' );
+	if ( 3 === h.length ) {
+		h = Array.from( h, ( c ) => c + c ).join( '' );
+	}
 	const [ r, g, b ] = [ 0, 2, 4 ].map( ( i ) => parseInt( h.slice( i, i + 2 ), 16 ) );
 	return 0.2126 * srgb( r ) + 0.7152 * srgb( g ) + 0.0722 * srgb( b );
 };
@@ -31,45 +36,44 @@ const PAIRS = [
 	// The reported bug: what upstream actually renders in dark mode.
 	[ 'BROKEN dark chip text on Spectre chip bg', '#ffffff', '#d5dbdf', 4.5 ],
 
-	// Light scheme (page bg #f7f8f9) — already passing, kept as a regression guard.
-	[ 'light chip text on chip bg', '#3b4351', '#eef0f3', 4.5 ],
-	[ 'light chip border vs page bg', '#848c96', '#f7f8f9', 3 ],
-	[ 'light focus ring vs page bg', '#2e5bec', '#f7f8f9', 3 ],
-	[ 'light placeholder on input bg', '#5c6470', '#ffffff', 4.5 ],
-
-	// Dark scheme (page bg #1e2327, surfaces #313443).
-	[ 'dark chip text on chip bg', '#ffffff', '#313443', 4.5 ],
-	[ 'dark chip border vs page bg', '#6b7183', '#1e2327', 3 ],
-	[ 'dark focus ring vs page bg', '#8ab4ff', '#1e2327', 3 ],
-	[ 'dark active chip text on active bg', '#ffffff', '#2e5bec', 4.5 ],
-	[ 'dark page text on page bg', '#ffffff', '#1e2327', 4.5 ],
-	[ 'dark card text on card bg', '#ffffff', '#313443', 4.5 ],
-	[ 'dark input text on input bg', '#ffffff', '#313443', 4.5 ],
-	[ 'dark placeholder on input bg', '#b9bfcb', '#313443', 4.5 ],
-	[ 'dark input border vs page bg', '#6b7183', '#1e2327', 3 ],
-
-	// Comment form.
-	[ 'light textarea text on textarea bg', '#3b4351', '#ffffff', 4.5 ],
-	[ 'light textarea border vs card bg', '#848c96', '#f7f8f9', 3 ],
-	[ 'dark textarea text on textarea bg', '#ffffff', '#313443', 4.5 ],
-	[ 'dark textarea placeholder on bg', '#b9bfcb', '#313443', 4.5 ],
-	[ 'light submit text on button bg', '#3b4351', '#eef0f3', 4.5 ],
-	[ 'light submit border vs card bg', '#848c96', '#f7f8f9', 3 ],
-	[ 'dark submit text on button bg', '#ffffff', '#313443', 4.5 ],
-	[ 'dark submit border vs page bg', '#6b7183', '#1e2327', 3 ],
-
-	[ 'light comments note on card bg', '#5c6470', '#f7f8f9', 4.5 ],
-	[ 'dark comments note on card bg', '#b9bfcb', '#313443', 4.5 ],
-
-	// ActivityPub mention indicator.
-	[ 'light mention indicator on card bg', '#b42318', '#f7f8f9', 4.5 ],
-	[ 'dark mention indicator on card bg', '#ff8a80', '#313443', 4.5 ],
-
 	// Direct Messages.
 	[ 'DM unread count on badge', '#ffffff', '#b42318', 4.5 ],
 	[ 'light DM text on own message', '#3b4351', '#dce7ff', 4.5 ],
 	[ 'dark DM text on own message', '#ffffff', '#23406b', 4.5 ],
 ];
+
+// Use the SCSS tokens directly so a palette change also changes what we check.
+const orbit = readFileSync( new URL( '_orbit.scss', import.meta.url ), 'utf8' );
+const [ lightSource, darkSource ] = orbit.split( '@media (prefers-color-scheme: dark)', 2 );
+for ( const [ scheme, source, mention ] of [
+	[ 'light', lightSource, '#b42318' ],
+	[ 'dark', darkSource, '#ff8a80' ],
+] ) {
+	const colors = Object.fromEntries(
+		Array.from( source.matchAll( /--asterism-([\w-]+):\s*(#[0-9a-f]{3,6});/gi ), ( [ , name, value ] ) => [ name, value ] ),
+	);
+	const { ink, muted, canvas, panel, rail, raised, accent, control, selected, 'on-accent': onAccent } = colors;
+	for ( const [ name, foreground, background, required ] of [
+		[ 'page text', ink, canvas, 4.5 ],
+		[ 'card and chip text', ink, panel, 4.5 ],
+		[ 'sidebar text', ink, rail, 4.5 ],
+		[ 'metadata and comments note', muted, panel, 4.5 ],
+		[ 'sidebar heading', muted, rail, 4.5 ],
+		[ 'input text', ink, raised, 4.5 ],
+		[ 'search and reply placeholder', muted, raised, 4.5 ],
+		[ 'selected label', accent, selected, 4.5 ],
+		[ 'post link and focus ring', accent, panel, 4.5 ],
+		[ 'button text', onAccent, accent, 4.5 ],
+		[ 'button fill and focus ring on page', accent, canvas, 3 ],
+		[ 'sidebar focus ring', accent, rail, 3 ],
+		[ 'chip and search boundary on page', control, canvas, 3 ],
+		[ 'reply and menu boundary on panel', control, panel, 3 ],
+		[ 'input boundary against its fill', control, raised, 3 ],
+		[ 'ActivityPub mention on card', mention, panel, 4.5 ],
+	] ) {
+		PAIRS.push( [ scheme + ' ' + name, foreground, background, required ] );
+	}
+}
 
 let failed = 0;
 for ( const [ label, fg, bg, need ] of PAIRS ) {

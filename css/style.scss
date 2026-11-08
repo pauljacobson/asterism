@@ -877,9 +877,6 @@ h2#page-title a.dashicons {
 .friends-page {
 	background-color: $body-bg !important;
 
-	#main-header #page-title{
-		display: none !important;
-	}
 	.off-canvas .off-canvas-content {
 		margin-top: unset;
 	}
@@ -888,9 +885,6 @@ h2#page-title a.dashicons {
 		margin-top: unset;
 	}
 
-	.off-canvas-content header.navbar{
-		display: none !important;
-	}
 
 	.friends-brand .friends-logo h2{
 		text-transform: unset !important;
@@ -1127,6 +1121,7 @@ h2#page-title a.dashicons {
 @import "friends-lists";
 @import "add-friend";
 @import "direct-messages";
+@import "orbit";
 
 // Fork additions — must stay last so its rules take precedence.
 @import "mobile";

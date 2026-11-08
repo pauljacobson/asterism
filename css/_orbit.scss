@@ -1,0 +1,496 @@
+// Orbit's palette and reading rhythm for the existing Friends templates.
+.friends-page {
+	--asterism-canvas: #f1f3fa;
+	--asterism-panel: #fff;
+	--asterism-raised: #f7f8fd;
+	--asterism-rail: #fff;
+	--asterism-ink: #242a42;
+	--asterism-muted: #636d87;
+	--asterism-line: #dfe3ef;
+	--asterism-control: #77829a;
+	--asterism-accent: #6250cb;
+	--asterism-selected: #eeeaff;
+	--asterism-on-accent: #fff;
+	--asterism-shadow: 0 .4rem 1.2rem #252b5010;
+	--asterism-measure: 40rem;
+	--asterism-admin-offset: 0px;
+	background: var(--asterism-canvas) !important;
+	color: var(--asterism-ink) !important;
+	color-scheme: light;
+
+	@media (prefers-color-scheme: dark) {
+		--asterism-canvas: #101322;
+		--asterism-panel: #1a2033;
+		--asterism-raised: #222a40;
+		--asterism-rail: #14192b;
+		--asterism-ink: #f1f2fc;
+		--asterism-muted: #a9b3ce;
+		--asterism-line: #303a52;
+		--asterism-control: #79839c;
+		--asterism-accent: #b3a9ff;
+		--asterism-selected: #302e50;
+		--asterism-on-accent: #101322;
+		--asterism-shadow: 0 .4rem 1.2rem #070b171a;
+		color-scheme: dark;
+	}
+
+	&.admin-bar {
+		--asterism-admin-offset: var(--wp-admin--admin-bar--height, 32px);
+	}
+
+	&.off-canvas > .off-canvas-content {
+		min-width: 0;
+		height: auto;
+		margin: 0;
+		// Friends disables WordPress core's admin-bar margin on its frontend.
+		padding: calc(var(--asterism-admin-offset) + clamp(.65rem, 2.8vw, 1.6rem)) clamp(.55rem, 3vw, 2rem) 2rem;
+		background: var(--asterism-canvas) !important;
+	}
+
+	.asterism-header,
+	section.posts {
+		width: 100%;
+		max-width: var(--asterism-measure);
+		margin-inline: auto;
+	}
+
+	.asterism-header {
+		margin-bottom: .9rem;
+	}
+
+	.asterism-header.no-bottom-margin {
+		margin-bottom: 0;
+	}
+
+	.asterism-mark {
+		color: var(--asterism-accent);
+		font: 1.6rem/.95 Georgia, serif;
+	}
+
+	.asterism-mobile-header {
+		display: none;
+	}
+
+	.asterism-header #page-title {
+		margin: 0 0 .25rem;
+		font-size: clamp(1.5rem, 4vw, 2.1rem);
+		font-weight: 700;
+		line-height: 1.13;
+		letter-spacing: -.035em;
+	}
+
+	.asterism-header #page-title a {
+		color: var(--asterism-ink) !important;
+	}
+
+	.asterism-header .navbar-section.search {
+		margin-bottom: 1.05rem;
+	}
+
+	.asterism-header .search-dialog {
+		width: min(calc(100% - 1rem), 23rem);
+		border-radius: .55rem;
+		background: var(--asterism-panel);
+	}
+
+	.asterism-header .form-autocomplete {
+		width: min(100%, 22rem);
+	}
+
+	.asterism-header .form-autocomplete-input.form-input {
+		min-width: 0;
+		height: auto;
+		margin: 0;
+		padding: 0;
+		border: 0;
+		background: transparent;
+
+		.has-icon-right {
+			width: 100%;
+		}
+	}
+
+	.asterism-header #master-search {
+		width: 100%;
+		min-height: 2.05rem;
+		margin: 0;
+		padding-inline: .7rem 1.3rem;
+		background: var(--asterism-raised);
+		border: 1px solid var(--asterism-control);
+		border-radius: .48rem 0 0 .48rem;
+		color: var(--asterism-ink);
+	}
+
+	.asterism-header .input-group-btn {
+		min-height: 2.05rem;
+		margin: 0;
+		padding-inline: .7rem;
+		border-radius: 0 .48rem .48rem 0;
+		background: var(--asterism-accent) !important;
+		color: var(--asterism-on-accent);
+		font-weight: 650;
+	}
+
+	#friends-sidebar {
+		top: var(--asterism-admin-offset);
+		display: flex;
+		flex-direction: column;
+		gap: .7rem;
+		width: 10.8rem;
+		max-width: 85vw;
+		padding: 1.15rem .7rem .8rem;
+		border-inline-end: 1px solid var(--asterism-line);
+		background: var(--asterism-rail) !important;
+		color: var(--asterism-ink) !important;
+		overflow-wrap: anywhere;
+
+		.friends-brand {
+			position: static;
+			margin: 0;
+			padding-inline: .3rem;
+		}
+
+		.friends-brand .friends-logo {
+			display: flex;
+			gap: .38rem;
+			color: var(--asterism-ink) !important;
+		}
+
+		.friends-logo h2 {
+			margin: 0;
+			letter-spacing: -.04em;
+		}
+
+		.friends-sidebar-customize {
+			margin-inline-start: 0;
+			color: var(--asterism-muted) !important;
+			font-size: .62rem;
+			line-height: 1.35;
+		}
+
+		.friends-nav {
+			position: static;
+			width: auto;
+			overflow: visible;
+			padding: 0;
+		}
+
+		.friends-widget,
+		.friends-widget details {
+			margin-bottom: .8rem;
+		}
+
+		.friends-widget h5,
+		.friends-widget h5 > a {
+			color: var(--asterism-muted) !important;
+			letter-spacing: .07em;
+		}
+
+		.friends-widget form.input-group .form-input {
+			background: var(--asterism-raised);
+			border-color: var(--asterism-control);
+			color: var(--asterism-ink);
+
+			&::placeholder {
+				color: var(--asterism-muted) !important;
+			}
+		}
+
+		.friends-nav .menu {
+			background: transparent !important;
+			box-shadow: none;
+			margin: 0;
+			padding: 0;
+		}
+
+		.friends-nav .subscription-count,
+		.friends-nav .friend-count {
+			background: var(--asterism-selected);
+			color: var(--asterism-accent);
+			border-color: var(--asterism-accent);
+		}
+
+		.friends-nav .menu-item > a {
+			display: block;
+			margin: 0;
+			padding: .3rem .42rem;
+			border-radius: .4rem;
+			color: var(--asterism-ink) !important;
+		}
+
+		.friends-nav .menu-item > a:hover,
+		.friends-nav .menu-item > a:focus-visible,
+		.friends-nav .menu-item > a[aria-current="page"] {
+			background: var(--asterism-selected) !important;
+			color: var(--asterism-accent) !important;
+		}
+	}
+
+	@media (min-width: $off-canvas-breakpoint) {
+		&.off-canvas.off-canvas-sidebar-show #friends-sidebar {
+			position: sticky;
+			align-self: flex-start;
+			height: calc(100vh - var(--asterism-admin-offset));
+			height: calc(100dvh - var(--asterism-admin-offset));
+		}
+	}
+
+	@media (max-width: ($off-canvas-breakpoint - 1px)) {
+		#friends-sidebar:not(:target):not(.active) {
+			visibility: hidden;
+		}
+
+		.asterism-mobile-header {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: .5rem;
+			margin-bottom: .8rem;
+			padding: .48rem .6rem;
+			border: 1px solid var(--asterism-line);
+			border-radius: .55rem;
+			background: var(--asterism-rail);
+		}
+
+		.asterism-mobile-header .friends-logo {
+			display: inline-flex;
+			align-items: center;
+			gap: .35rem;
+			color: var(--asterism-ink) !important;
+			font-weight: 700;
+		}
+
+		.asterism-mobile-header .off-canvas-toggle {
+			position: static;
+			display: inline-flex;
+			align-items: center;
+			gap: .2rem;
+			min-height: 1.85rem;
+			height: auto;
+			margin: 0;
+			padding: .18rem .42rem;
+			background: var(--asterism-panel) !important;
+			color: var(--asterism-ink) !important;
+			border: 1px solid var(--asterism-control) !important;
+			border-radius: .4rem;
+		}
+	}
+
+	// The messages template asks for the search bar to be hidden on phones.
+	@media (max-width: 840px) {
+		.asterism-header .navbar-section.search.hide-mobile-search {
+			display: none;
+		}
+	}
+
+	section.posts {
+		display: block;
+
+		> article.card,
+		> .friends-empty-state {
+			height: auto;
+			margin: 0 0 .7rem;
+			padding: clamp(.7rem, 2.4vw, 1.3rem) !important;
+			border: 1px solid var(--asterism-line) !important;
+			border-radius: .7rem;
+			background: var(--asterism-panel) !important;
+			color: var(--asterism-ink) !important;
+			box-shadow: var(--asterism-shadow);
+		}
+
+		> article.card {
+			.entry-header {
+				align-items: center;
+				gap: .25rem;
+				margin: 0 0 .5rem;
+				padding: 0;
+				font-size: .7rem;
+			}
+
+			.post-meta {
+				flex: 1 1 8rem;
+				min-width: 0;
+				overflow-wrap: anywhere;
+			}
+
+			.author > a {
+				color: var(--asterism-ink) !important;
+			}
+
+			.permalink,
+			.permalink a {
+				color: var(--asterism-muted) !important;
+			}
+
+			.permalink a {
+				text-decoration: underline;
+				text-underline-offset: .14em;
+			}
+
+			.card-title {
+				margin: 0 0 .4rem;
+				padding: 0;
+				font-size: 1.2rem;
+				font-weight: 680;
+				line-height: 1.2;
+				letter-spacing: -.025em;
+			}
+
+			.card-title a {
+				color: var(--asterism-ink) !important;
+			}
+
+			.card-body {
+				padding: 0;
+				background: transparent !important;
+				font-size: .9rem;
+				line-height: 1.64;
+			}
+
+			.card-body > :last-child {
+				margin-bottom: 0;
+			}
+
+			.card-body blockquote {
+				border-inline-start: .15rem solid var(--asterism-accent);
+				color: var(--asterism-muted);
+			}
+
+			.card-body a:any-link:not(.btn):not(.button):not(.wp-element-button):not(.friends-link-preview):not([role="button"]) {
+				color: var(--asterism-accent) !important;
+				text-decoration: underline;
+				text-underline-offset: .15em;
+			}
+
+			footer.entry-meta {
+				justify-content: flex-start;
+				margin-top: .6rem;
+				padding: .32rem 0 0;
+				border-top: 1px solid var(--asterism-line);
+			}
+
+			footer.entry-meta .btn,
+			.entry-header .btn {
+				background: transparent !important;
+				color: var(--asterism-accent) !important;
+			}
+
+			footer.entry-meta .friends-reaction.pressed {
+				background: var(--asterism-selected) !important;
+			}
+
+			.comments-content {
+				margin-top: .6rem;
+				padding: .65rem 0 0;
+				border-top: 1px solid var(--asterism-line);
+			}
+
+			.comments-content .comment-body {
+				padding: .7rem .8rem;
+				border: 1px solid var(--asterism-line);
+				border-radius: .45rem;
+				background: var(--asterism-raised);
+			}
+
+			.comments-content .comment-metadata,
+			.comments-content .comment-metadata a {
+				color: var(--asterism-muted) !important;
+			}
+		}
+	}
+
+	.friends-content-warning,
+	section.posts > article.card .card-body a.friends-link-preview {
+		display: block;
+		margin-block: .55rem;
+		padding: .55rem .65rem;
+		border: 1px solid var(--asterism-line);
+		border-radius: .4rem;
+		background: var(--asterism-raised);
+	}
+
+	.friends-content-warning > summary {
+		min-height: 1.5rem;
+		cursor: pointer;
+	}
+
+	.friends-content-warning-toggle {
+		margin-inline-start: .35rem;
+		color: var(--asterism-accent);
+		text-decoration: underline;
+	}
+
+	.friends-content-warning[open] .friends-content-warning-toggle {
+		display: none;
+	}
+
+	.friends-content-warning-content {
+		margin-top: .5rem;
+	}
+
+	section.posts > article.card .card-body a.friends-link-preview {
+		display: flex;
+		align-items: center;
+		gap: .5rem;
+		color: var(--asterism-ink) !important;
+		text-decoration: none;
+
+		&:hover strong,
+		&:focus-visible strong {
+			text-decoration: underline;
+		}
+	}
+
+	.friends-link-preview-image {
+		flex: 0 0 3.1rem;
+	}
+
+	.friends-link-preview-text {
+		display: grid;
+		min-width: 0;
+		font-size: .7rem;
+	}
+
+	.friends-link-preview-description,
+	.friends-link-preview-host {
+		color: var(--asterism-muted);
+	}
+
+	.asterism-back-to-feed {
+		display: inline-flex;
+		align-items: center;
+		gap: .3rem;
+		min-height: 1.55rem;
+		color: var(--asterism-accent) !important;
+		font-weight: 650;
+	}
+
+	section.posts > article.card .asterism-read-post {
+		display: inline-flex;
+		align-items: center;
+		gap: .25rem;
+		min-height: 1.6rem;
+		color: var(--asterism-accent) !important;
+		font-size: .72rem;
+		font-weight: 650;
+	}
+
+	&.asterism-reading section.posts > article.card {
+		padding: clamp(.8rem, 3.5vw, 1.8rem) !important;
+
+		.card-title {
+			margin-block: .8rem;
+			font-size: clamp(1.5rem, 4.6vw, 2.25rem);
+			line-height: 1.13;
+		}
+
+		.card-body {
+			max-width: 65ch;
+		}
+
+		.comments-content {
+			margin-top: 1rem;
+			padding-top: 1rem;
+		}
+	}
+}
