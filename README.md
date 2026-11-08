@@ -76,7 +76,7 @@ Only needed if you change the SCSS. The stylesheet imports
 
 ```sh
 cd css
-npm install
+npm ci
 npm run build      # or: npm run watch
 ```
 
