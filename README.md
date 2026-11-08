@@ -13,6 +13,10 @@ Lívia Gouvêa — see [Credits](#credits). Every change made against it, and th
 measurements behind them, are recorded in the wiki:
 **[Changes against upstream](https://github.com/pauljacobson/asterism/wiki/Asterism:-changes-against-upstream)**.
 
+![Asterism’s light-mode Friends feed with sidebar navigation, search, filters, and a single column of post cards](assets/asterism-feed.png)
+
+*Asterism 1.2.0 with sample posts.*
+
 > **as·ter·ism** *n.* — a prominent pattern of stars that is not one of the 88 official
 > constellations: the Plough, the Summer Triangle, the Belt. Shapes named by the people
 > who look up, rather than handed down by decree, and recognisable as a shape only from
