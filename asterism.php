@@ -196,6 +196,28 @@ add_filter(
 	}
 );
 
+/**
+ * Render a Friends author name using the installed Friends version's API.
+ *
+ * @param string        $display_name The raw display name.
+ * @param \Friends\User $friend_user  The author.
+ * @return string Safe display name HTML.
+ */
+function asterism_author_display_name_html( $display_name, $friend_user ) {
+	$parser = \Friends\Feed_Parser_ActivityPub::class;
+
+	// Friends 4.4 moved custom emoji behind the display-name filter.
+	if ( is_callable( array( $parser, 'author_display_name_html' ) ) ) {
+		return wp_kses_post( apply_filters( 'friends_author_display_name_html', esc_html( $display_name ), $display_name, $friend_user ) );
+	}
+
+	if ( is_callable( array( $parser, 'replace_custom_emojis_for_user' ) ) ) {
+		return wp_kses( $parser::replace_custom_emojis_for_user( $display_name, $friend_user ), $parser::get_custom_emoji_allowed_html() );
+	}
+
+	return esc_html( $display_name );
+}
+
 /*
  * Upstream also registered a 'friends_frontend_post_types' filter that replaced
  * the feed's post types with array( 'post_type' => 'post' ) whenever REQUEST_URI

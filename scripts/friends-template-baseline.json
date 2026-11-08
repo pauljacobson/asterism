@@ -1,12 +1,12 @@
 {
-	"friendsVersion": "4.2.1",
-	"upstreamCommit": "fe56fa29eb6cdadb5b0ee54fb24b6b6f358ab4b8",
+	"friendsVersion": "4.4.0",
+	"upstreamCommit": "74f0fb229caddf8a3a018a59b8fbe1f7caec049e",
 	"files": [
 		{
 			"path": "templates/frontend/header.php",
 			"role": "retained override",
 			"review": "Reconcile document metadata, sidebar integration, page header, and search controls.",
-			"sha256": "e099a38e2d357f6d8d938ef903d6b12737e761d2ae7bb9a76c84fb13587bd48c",
+			"sha256": "31adfa3fdd828e2faedc02395225048406f99ba055d820bef3825865e708d6a7",
 			"signals": {
 				"hooks": ["friends_after_header"],
 				"classes": ["ab-icon", "accordion-container", "author", "bt-action", "btn", "btn-primary", "dashicons", "dashicons-menu-alt2", "form-autocomplete", "form-autocomplete-input", "form-icon", "form-input", "friends-brand", "friends-logo", "friends-nav", "friends-sidebar-customize", "has-icon-right", "input-group", "input-group-btn", "input-inline", "mb-2", "menu", "navbar-section", "no-js", "no-svg", "off-canvas-content", "off-canvas-overlay", "off-canvas-sidebar", "off-canvas-toggle", "search-dialog"]
@@ -16,9 +16,9 @@
 			"path": "templates/frontend/parts/header.php",
 			"role": "retained override",
 			"review": "Reconcile author metadata, ActivityPub presentation, collapse control, and menu hooks without restoring the suppressed duplicate action menu.",
-			"sha256": "55e5dfa7a04fb9bbffd3bb375270b36d687341c4f5cf0f2d7f419b583c9e55de",
+			"sha256": "667a0159c74a971652b65d56db715c6c8b829e3a4a73e045f31de23640bc11f7",
 			"signals": {
-				"hooks": ["friends_author_avatar_url", "friends_author_url", "friends_frontend_post_types", "friends_override_author_name", "friends_post_author_meta"],
+				"hooks": ["friends_author_avatar_url", "friends_author_display_name_html", "friends_author_url", "friends_frontend_post_types", "friends_override_author_name", "friends_post_author_meta"],
 				"classes": ["author", "author-avatar", "avatar", "btn", "btn-link", "card-header", "col-auto", "col-ml-auto", "collapse-post", "columns", "dashicons", "dashicons-fullscreen-exit-alt", "dashicons-menu-alt2", "entry-header", "friends-dropdown", "friends-dropdown-right", "friends-dropdown-toggle", "mention-indicator", "menu", "mr-2", "overflow", "permalink", "post-meta", "reading-time", "translator-exclude"]
 			}
 		},
@@ -26,9 +26,9 @@
 			"path": "templates/frontend/parts/header-status.php",
 			"role": "retained override",
 			"review": "Reconcile custom emoji, mention, reblog avatar, author metadata, collapse control, and menu behavior.",
-			"sha256": "1a05d13ab628ff356b8f897e796e1d631dd8b8ebbfa7ed82f4e0cd7537d668c2",
+			"sha256": "34727099e6e1cf73f632be83757b7e44f6b8ecabb4b19f56e1f475505b8e9cfc",
 			"signals": {
-				"hooks": ["friends_author_avatar_url", "friends_author_url", "friends_frontend_post_types", "friends_override_author_name", "friends_post_author_meta"],
+				"hooks": ["friends_author_avatar_url", "friends_author_display_name_html", "friends_author_url", "friends_frontend_post_types", "friends_override_author_name", "friends_post_author_meta"],
 				"classes": ["author", "author-avatar", "avatar", "avatar-overlay", "btn", "btn-link", "card-header", "col-auto", "col-ml-auto", "collapse-post", "columns", "dashicons", "dashicons-fullscreen-exit-alt", "dashicons-menu-alt2", "entry-header", "friends-dropdown", "friends-dropdown-right", "friends-dropdown-toggle", "invisible", "mention-indicator", "menu", "mr-2", "overflow", "permalink", "post-meta", "reading-time", "teaser"]
 			}
 		},
@@ -53,12 +53,22 @@
 			}
 		},
 		{
+			"path": "templates/frontend/parts/entry-content.php",
+			"role": "inherited post body",
+			"review": "Check content warning disclosure, link previews, and how the status teaser handles a warning.",
+			"sha256": "62494cf4f60e6cd83e539ddbae43c497b5afe52af8e04c0e956f43dd98cc1e00",
+			"signals": {
+				"hooks": [],
+				"classes": ["card-body", "friends-content-warning", "friends-content-warning-content", "friends-content-warning-text", "friends-content-warning-toggle"]
+			}
+		},
+		{
 			"path": "templates/frontend/subscriptions.php",
 			"role": "styled inherited feature",
 			"review": "Check Following search, filters, sorting, pagination, and subscription actions.",
-			"sha256": "683c85955dbabbbd03dd3de653143b4a2aa3460e151b73a2f851ad2309f4ccb6",
+			"sha256": "fe85dddfff8bb03e18269401bb2fa45057229112055c0ccb6fe7fab3433a257e",
 			"signals": {
-				"hooks": [],
+				"hooks": ["friends_subscription_actions"],
 				"classes": ["avatar", "button", "dashicons", "dashicons-dismiss", "friends-search", "friends-search-clear", "friends-search-input", "friends-search-label", "friends-search-submit", "pagination", "starred", "subscription-action", "subscription-actions", "subscription-description", "subscription-folder", "subscription-info", "subscription-item", "subscription-link", "subscription-meta", "subscription-name", "subscription-unfollow", "subscriptions"]
 			}
 		},
@@ -66,7 +76,7 @@
 			"path": "templates/frontend/add-friend-form.php",
 			"role": "styled inherited feature",
 			"review": "Check multi-address, handle, OPML, discovery, preview, and bulk-add controls.",
-			"sha256": "d6c5097f9f1b858c00528821069a9a4f0aadd0bd59f727747e3b27d4e07fc279",
+			"sha256": "26378983fa6d24b71df1f63fa98d4cc93267bffd6ec8f32344ef5f94b8bf7c09",
 			"signals": {
 				"hooks": ["friends_mastodon_instances"],
 				"classes": ["add-friend-card", "add-friend-discovery-card", "add-friend-subscriptions", "add-subscription-input", "btn", "btn-primary", "card", "card-body", "form-input", "opml-file-hint", "subscriptions"]
@@ -76,10 +86,10 @@
 			"path": "templates/frontend/messages.php",
 			"role": "styled inherited feature",
 			"review": "Check conversation, unread, thread, message, account, and reply markup.",
-			"sha256": "4a73ba242b8268f2893beba133125b60a5f4e67d9d579d326ef80c1e63da60c9",
+			"sha256": "23d3fda3df5727b9a068af8640192826a205b527ddafa446a5e1033374fa71d8",
 			"signals": {
 				"hooks": ["friends_message_form_accounts", "the_content"],
-				"classes": ["avatar", "friends-dm-conversation-main", "friends-dm-conversation-meta", "friends-dm-conversation-name", "friends-dm-conversation-preview", "friends-dm-empty", "friends-dm-message-avatar", "friends-dm-message-body", "friends-dm-message-content", "friends-dm-message-meta", "friends-dm-messages", "friends-dm-reply", "friends-dm-sidebar", "friends-dm-thread", "friends-dm-thread-header", "friends-dm-unread-count", "friends-dm-view"]
+				"classes": ["avatar", "friends-content-warning", "friends-content-warning-content", "friends-content-warning-text", "friends-content-warning-toggle", "friends-dm-back", "friends-dm-conversation-main", "friends-dm-conversation-meta", "friends-dm-conversation-name", "friends-dm-conversation-preview", "friends-dm-delivery-status", "friends-dm-empty", "friends-dm-message-avatar", "friends-dm-message-body", "friends-dm-message-content", "friends-dm-message-meta", "friends-dm-message-reaction", "friends-dm-message-reactions", "friends-dm-messages", "friends-dm-reply", "friends-dm-sidebar", "friends-dm-thread", "friends-dm-thread-header", "friends-dm-unread-count", "friends-dm-view"]
 			}
 		}
 	]
