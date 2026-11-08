@@ -103,9 +103,9 @@ arrive, but it applies to everyone.
 ## Credits
 
 Asterism is based on **[FediPress](https://github.com/alquimidia/fedipress) 1.0.2** by
-**Lívia Gouvêa**, whose design this keeps almost entirely. The work here is corrective —
-restoring UI that FediPress hid, fixing colour contrast and layout on small screens, and
-making controls work that were bound to another theme. The visual identity is hers.
+**Lívia Gouvêa**. The fork restores hidden controls, improves contrast and small-screen
+layout, and takes inspiration for its current palette and reading layout from
+[Asterism Reader](https://github.com/pauljacobson/asterism-reader).
 
 FediPress in turn is a theme for [Friends](https://github.com/akirk/friends) by
 **Alex Kirk**, which does all the actual work of following people and caching their posts.

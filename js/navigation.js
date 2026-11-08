@@ -42,16 +42,25 @@
 	/**
 	 * Reflect the CSS-driven off-canvas state on its opening control.
 	 */
-	function updateSidebarState() {
+	function updateSidebarState( event ) {
 		var sidebar = document.getElementById( 'friends-sidebar' );
 		var toggle = document.querySelector( '.off-canvas-toggle[aria-controls="friends-sidebar"]' );
 		if ( ! sidebar || ! toggle ) {
 			return;
 		}
 
-		var desktopVisible = 'relative' === window.getComputedStyle( sidebar ).position;
+		var desktopVisible = 'fixed' !== window.getComputedStyle( sidebar ).position;
 		var expanded = desktopVisible || '#friends-sidebar' === window.location.hash;
+		var wasExpanded = 'true' === toggle.getAttribute( 'aria-expanded' );
 		toggle.setAttribute( 'aria-expanded', expanded ? 'true' : 'false' );
+
+		if ( event && 'hashchange' === event.type && ! desktopVisible ) {
+			if ( expanded ) {
+				sidebar.querySelector( '.friends-logo' ).focus();
+			} else if ( wasExpanded ) {
+				toggle.focus();
+			}
+		}
 	}
 
 	document.addEventListener( 'click', function ( event ) {
@@ -97,6 +106,9 @@
 				closeDropdowns( null );
 				openTrigger.focus();
 				event.preventDefault();
+			} else if ( '#friends-sidebar' === window.location.hash ) {
+				window.location.hash = 'close';
+				event.preventDefault();
 			}
 		}
 	} );
@@ -105,6 +117,13 @@
 	window.addEventListener( 'resize', updateSidebarState );
 
 	document.addEventListener( 'DOMContentLoaded', function () {
+		var currentPage = window.location.href.split( '#' )[0];
+		Array.prototype.forEach.call( document.querySelectorAll( '#friends-sidebar .friends-nav a[href], .asterism-header a.chip[href]:not(.toggle-compact)' ), function ( link ) {
+			if ( link.href === currentPage ) {
+				link.setAttribute( 'aria-current', 'page' );
+			}
+		} );
+
 		Array.prototype.forEach.call( document.querySelectorAll( '.friends-dropdown-toggle' ), function ( trigger ) {
 			if ( 'A' === trigger.tagName ) {
 				trigger.setAttribute( 'role', 'button' );

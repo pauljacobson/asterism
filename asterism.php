@@ -13,7 +13,7 @@
  * Update URI: false
  *
  * Based on FediPress 1.0.2 by Lívia Gouvêa — https://github.com/alquimidia/fedipress
- * Its design is retained; see README.md for every change made against it.
+ * The visual refresh takes inspiration from Asterism Reader's Orbit design.
  *
  * Licensing note: upstream states GPL-3 in both its README and its plugin
  * header, but the LICENSE file it ships is the GNU Affero GPL v3, so GitHub
@@ -65,6 +65,25 @@ add_action(
 add_action(
 	'friends_load_theme_asterism',
 	function () {
+		add_action(
+			'friends_post_footer_first',
+			function () {
+				$post = get_post();
+				if ( is_single() || ! $post instanceof \WP_Post ) {
+					return;
+				}
+
+				$author = \Friends\User::get_post_author( $post );
+				?>
+				<a class="asterism-read-post" href="<?php echo esc_url( $author->get_local_friends_page_url( get_the_ID() ) ); ?>">
+					<?php esc_html_e( 'Read more' ); // phpcs:ignore WordPress.WP.I18n.MissingArgDomain -- WordPress core string. ?>
+					<span class="dashicons dashicons-arrow-right-alt" aria-hidden="true"></span>
+				</a>
+				<?php
+			},
+			1
+		);
+
 		$handle = 'asterism';
 		$path   = ASTERISM_PLUGIN_DIR . 'css/style.css';
 
